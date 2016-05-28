@@ -15,13 +15,17 @@
     1. >> 设置cell高度自适应：
     // cell布局设置好之后调用此方法就可以实现高度自适应（注意：如果用高度自适应则不要再以cell的底边为参照去布局其子view）
        [cell wd_setupBottomViewWithBottomViewArray:@[self.contentLabel] marginToBottom:margin];
-
+       为了实现缓存机制，请加上这句代码
+       - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+           [cell wd_setupTableView:tableView indexPath:indexPath];
+       }
     
     2. >> 获取自动计算出的cell高度
     return [WDDemoVC5Cell wd_heightForRowWithTableView:tableView atIndexPath:indexPath configuration:^(UITableViewCell *cell) {
         WDDemoVC5Cell *demoCell = (WDDemoVC5Cell *)cell;
         demoCell.model = self.dataArray[indexPath.row];
     }];
+    
 ## 普通view的自动布局：
     /* 用法一 */
     _view.wd_layout
