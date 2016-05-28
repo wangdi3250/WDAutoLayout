@@ -22,6 +22,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.contentInset = UIEdgeInsetsMake(-64, 0, 0, 0);
     [self setupSubviews];
     [self.dataArray addObjectsFromArray:[self creatModelsWithCount:10]];

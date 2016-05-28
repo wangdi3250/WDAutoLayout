@@ -269,13 +269,6 @@
 			path = DemoVC7;
 			sourceTree = "<group>";
 		};
-		01AEB9441CFA26AA00F62078 /* DemoVC8 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = DemoVC8;
-			sourceTree = "<group>";
-		};
 		01AEB9481CFA26AA00F62078 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -455,11 +448,9 @@
 			children = (
 				01AEB9421CFA26AA00F62078 /* DemoVC6 */,
 				01AEB9431CFA26AA00F62078 /* DemoVC7 */,
-				01AEB9441CFA26AA00F62078 /* DemoVC8 */,
 				01AEB93A1CFA267F00F62078 /* DemoVC4 */,
 				01D152751CF942450051589C /* DemoVC0 */,
 				01D152781CF942450051589C /* DemoVC1 */,
-				01D1527B1CF942450051589C /* DemoVC10 */,
 				01D152941CF942450051589C /* DemoVC2 */,
 				01D152971CF942450051589C /* DemoVC3 */,
 				01D1529C1CF942450051589C /* DemoVC5 */,
@@ -483,13 +474,6 @@
 				01D152D61CF947330051589C /* WDDemoVC1.m */,
 			);
 			path = DemoVC1;
-			sourceTree = "<group>";
-		};
-		01D1527B1CF942450051589C /* DemoVC10 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = DemoVC10;
 			sourceTree = "<group>";
 		};
 		01D152941CF942450051589C /* DemoVC2 */ = {

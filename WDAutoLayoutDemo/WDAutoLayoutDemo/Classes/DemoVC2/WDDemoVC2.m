@@ -17,7 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.view.backgroundColor = [UIColor whiteColor];
     self.view.wd_widthEqualSubviews = @[self.view0, self.view1, self.view2];
     self.view0.wd_layout
     .leftSpaceToView(self.view, 0)      // 左边距父view为0
