@@ -148,6 +148,7 @@
     if(cell.contentView.wd_width != cellW) {
         cell.contentView.wd_width = cellW;
     }
+    [self wd_resetLayoutDidFinished:cell.contentView.wd_layoutArray];
     [cell.contentView layoutSubviews];
     [cell wd_setupTableView:nil indexPath:nil];
     CGFloat height = 0;
@@ -182,6 +183,19 @@
 - (NSArray *)wd_subviewFramesWithIndexPath:(NSIndexPath *)indexPath
 {
     return [self.indexPathCache subviewFramesWithIndexPath:indexPath];
+}
+
+- (void)wd_resetLayoutDidFinished:(NSArray *)layoutArray
+{
+    if(!layoutArray.count) return;
+    for(int i = 0;i < layoutArray.count;i++) {
+        WDViewLayout *layout = layoutArray[i];
+        UIView *view = layout.needAutoLayoutView;
+        if(!view) continue;
+        layout.didFinishedCache = NO;
+        layout.cellSubview = NO;
+        [self wd_resetLayoutDidFinished:view.wd_layoutArray];
+    }
 }
 
 + (void)load

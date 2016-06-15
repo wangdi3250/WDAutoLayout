@@ -63,7 +63,7 @@
         [self.superview.wd_layoutArray addObject:newLayout];
     }
     return newLayout;
-
+    
 }
 
 - (NSMutableArray *)wd_layoutArray
@@ -118,16 +118,47 @@
 
 - (void)wd_updateLayout
 {
+    [self wd_resetLayoutDidFinished:self.superview.wd_layoutArray];
     [self.superview layoutSubviews];
+}
+
+- (void)wd_resetLayoutDidFinished:(NSArray *)layoutArray
+{
+    if(!layoutArray.count) return;
+    for(int i = 0;i < layoutArray.count;i++) {
+        WDViewLayout *layout = layoutArray[i];
+        UIView *view = layout.needAutoLayoutView;
+        if(!view) continue;
+        layout.didFinishedCache = NO;
+        layout.cellSubview = NO;
+        [self wd_resetLayoutDidFinished:view.wd_layoutArray];
+    }
+}
+
+- (void)wd_calculateCellSubviewFrame
+{
+    NSArray *layoutArray = self.wd_layoutArray;
+    if(!layoutArray.count) return;
+    for(int i = 0;i < layoutArray.count;i++) {
+        WDViewLayout *layout = layoutArray[i];
+        UIView *view = layout.needAutoLayoutView;
+        if(!view) continue;
+        if(!layout.isDidFinishedCache) {
+            [layout startLayout];
+            layout.didFinishedCache = YES;
+            layout.cellSubview = YES;
+        }
+        [view wd_calculateCellSubviewFrame];
+    }
 }
 
 - (void)wd_adjustCellSubviewFrame
 {
-    NSMutableArray *layoutArray = self.wd_layoutArray;
+    UIView *contentView = ((UITableViewCell *)self).contentView;
+    NSArray *layoutArray = contentView.wd_layoutArray;
     if(!layoutArray.count) return;
-    NSArray *cellSubviewFrames = [self.wd_tableView wd_subviewFramesWithIndexPath:self.wd_indexPath];
+    NSArray *cellSubviewFrames = [contentView.wd_tableView wd_subviewFramesWithIndexPath:contentView.wd_indexPath];
     if(cellSubviewFrames.count != layoutArray.count) {
-        [self wd_adjustSubviewsFrame];
         return;
     }
     for(int i = 0;i < layoutArray.count;i++) {
@@ -137,8 +168,22 @@
         WDCellSubviewFrame *cellSubviewFrame = cellSubviewFrames[i];
         NSArray *subviewFrames = cellSubviewFrame.subviewFrames;
         view.frame = cellSubviewFrame.selfFrame;
-        layout.didFinishedCache = YES;
+        layout.cellSubview = YES;
         [view wd_enumerateCellAllSubviewWithSubviewFrames:subviewFrames];
+    }
+}
+
+- (void)wd_calculateNormalViewFrame
+{
+    NSArray *layoutArray = self.wd_layoutArray;
+    if(!layoutArray.count) return;
+    for(int i = 0;i < layoutArray.count;i++) {
+        WDViewLayout *layout = layoutArray[i];
+        UIView *view = layout.needAutoLayoutView;
+        if(!view) continue;
+        if(!layout.isCellSubview) {
+            [layout startLayout];
+        }
     }
 }
 
@@ -152,35 +197,14 @@
         UIView *view = layout.needAutoLayoutView;
         if(!view) continue;
         WDCellSubviewFrame *subviewFrame = subviewFrames[i];
+        view.frame = subviewFrame.selfFrame;
         [view wd_enumerateCellAllSubviewWithSubviewFrames:subviewFrame.subviewFrames];
-        layout.cellSubviewFrame = subviewFrame;
-        layout.didFinishedCache = YES;
-    }
-}
-
-- (void)wd_adjustSubviewsFrame
-{
-    NSMutableArray *layoutArray = self.wd_layoutArray;
-    if(!layoutArray.count) return;
-    for(int i = 0;i < layoutArray.count;i++) {
-        WDViewLayout *layout = layoutArray[i];
-        UIView *view = layout.needAutoLayoutView;
-        if(!view) continue;
-        if(layout.cellSubviewFrame) {
-            view.frame = layout.cellSubviewFrame.selfFrame;
-        } else {
-            [layout startLayout];
-        }
     }
 }
 
 - (void)wd_adjustMySelfFrame
 {
     if([self isKindOfClass:[UITableViewCell class]] || (!self.wd_bottomViewArray.count && !self.wd_rightViewArray.count)) return;
-    if(self.wd_layout.isDidFinishedCache) {
-        self.wd_layout.didFinishedCache = NO;
-        return;
-    }
     CGFloat contentHeight = 0;
     CGFloat contentWidth = 0;
     if(self.wd_bottomViewArray.count) {
@@ -218,7 +242,7 @@
         }
         
         if(self.wd_rightViewArray.count && ceil(self.wd_width) != ceil(contentWidth)) {
-
+            
             self.wd_width = contentWidth;
             self.wd_layout.widthFix = YES;
         }
@@ -289,13 +313,12 @@
     [self wd_setupWidthEqualSubviews];
     [self wd_setupHeightEqualSubviews];
     [self wd_setupAutoLayout];
-    NSArray *layoutArray = self.wd_layoutArray;
-    if(layoutArray.count) {
-        if([self isKindOfClass:NSClassFromString(@"UITableViewCellContentView")] && self.wd_tableView && self.wd_indexPath) {
-            [self wd_adjustCellSubviewFrame];
-        } else {
-            [self wd_adjustSubviewsFrame];
-        }
+    if([self isKindOfClass:NSClassFromString(@"UITableViewCellContentView")] && self.wd_tableView && self.wd_indexPath) {
+        [self wd_calculateCellSubviewFrame];
+    } else if([self isKindOfClass:[UITableViewCell class]] && ((UITableViewCell *)self).contentView.wd_layoutArray.count) {
+        [self wd_adjustCellSubviewFrame];
+    } else {
+        [self wd_calculateNormalViewFrame];
     }
     [self wd_adjustMySelfFrame];
 }
@@ -339,13 +362,13 @@
 - (CGFloat)wd_autoLayoutHormargin
 {
     return [objc_getAssociatedObject(self, _cmd) doubleValue];
-
+    
 }
 
 - (void)setWd_autoLayoutHormargin:(CGFloat)wd_autoLayoutHormargin
 {
     objc_setAssociatedObject(self, @selector(wd_autoLayoutHormargin), @(wd_autoLayoutHormargin), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
+    
 }
 
 - (CGFloat)wd_autoLayoutVerMargin
@@ -356,31 +379,31 @@
 - (void)setWd_autoLayoutVerMargin:(CGFloat)wd_autoLayoutVerMargin
 {
     objc_setAssociatedObject(self, @selector(wd_autoLayoutVerMargin), @(wd_autoLayoutVerMargin), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
+    
 }
 
 - (NSInteger)wd_rowCount
 {
     return [objc_getAssociatedObject(self, _cmd) integerValue];
-
+    
 }
 
 - (void)setWd_rowCount:(NSInteger)wd_rowCount
 {
     objc_setAssociatedObject(self, @selector(wd_rowCount), @(wd_rowCount), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
+    
 }
 
 - (BOOL)isWd_FixWidthLayout
 {
     return [objc_getAssociatedObject(self, _cmd) boolValue];
-
+    
 }
 
 - (void)setWd_fixWidthLayout:(BOOL)wd_fixWidthLayout
 {
     objc_setAssociatedObject(self, @selector(isWd_FixWidthLayout), @(wd_fixWidthLayout), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
+    
 }
 
 - (UIView *)wd_bottomView
@@ -480,7 +503,11 @@
     self.wd_autoLayoutHormargin = horizontalMargin;
     self.wd_autoLayoutVerMargin = verticalMargin;
     self.wd_rowCount = rowCount;
-    [self wd_setupBottomViewWithBottomView:itemArray.lastObject marginToBottom:verticalMargin];
+    if(itemArray.count) {
+        [self wd_setupBottomViewWithBottomView:itemArray.lastObject marginToBottom:verticalMargin];
+    } else {
+        [self.wd_layoutArray removeAllObjects];
+    }
 }
 
 @end
@@ -632,6 +659,15 @@
 - (void)setAttributedContent:(BOOL)attributedContent
 {
     objc_setAssociatedObject(self, @selector(isAttributedContent), @(attributedContent), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (void)wd_setMaxNumberOfLines:(NSInteger)lineCount
+{
+    if(lineCount > 0) {
+        self.wd_layout.maxHeight(self.font.lineHeight * lineCount + 0.1);
+    } else {
+        self.wd_layout.maxHeight(MAXFLOAT);
+    }
 }
 
 @end

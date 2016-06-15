@@ -62,6 +62,9 @@
 		01AEB9B81CFA26AA00F62078 /* test3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 01AEB9891CFA26AA00F62078 /* test3.jpg */; };
 		01AEB9B91CFA26AA00F62078 /* test4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 01AEB98A1CFA26AA00F62078 /* test4.jpg */; };
 		01AEB9BC1CFA26AA00F62078 /* WDDemoVC7.m in Sources */ = {isa = PBXBuildFile; fileRef = 01AEB9BB1CFA26AA00F62078 /* WDDemoVC7.m */; };
+		01C810A11D0724FB004BE1A1 /* WDDemoVC8.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C810A01D0724FB004BE1A1 /* WDDemoVC8.m */; };
+		01C810A41D07253E004BE1A1 /* WDDemoVC8Cell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C810A31D07253E004BE1A1 /* WDDemoVC8Cell.m */; };
+		01C810A71D07277B004BE1A1 /* WDDemoVC8Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C810A61D07277B004BE1A1 /* WDDemoVC8Model.m */; };
 		01D152321CF9408E0051589C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D152311CF9408E0051589C /* main.m */; };
 		01D152351CF9408E0051589C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D152341CF9408E0051589C /* AppDelegate.m */; };
 		01D1523B1CF9408E0051589C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01D152391CF9408E0051589C /* Main.storyboard */; };
@@ -168,6 +171,12 @@
 		01AEB98A1CFA26AA00F62078 /* test4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test4.jpg; sourceTree = "<group>"; };
 		01AEB9BA1CFA26AA00F62078 /* WDDemoVC7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDemoVC7.h; sourceTree = "<group>"; };
 		01AEB9BB1CFA26AA00F62078 /* WDDemoVC7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDemoVC7.m; sourceTree = "<group>"; };
+		01C8109F1D0724FB004BE1A1 /* WDDemoVC8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDemoVC8.h; sourceTree = "<group>"; };
+		01C810A01D0724FB004BE1A1 /* WDDemoVC8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDemoVC8.m; sourceTree = "<group>"; };
+		01C810A21D07253E004BE1A1 /* WDDemoVC8Cell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDemoVC8Cell.h; sourceTree = "<group>"; };
+		01C810A31D07253E004BE1A1 /* WDDemoVC8Cell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDemoVC8Cell.m; sourceTree = "<group>"; };
+		01C810A51D07277B004BE1A1 /* WDDemoVC8Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDemoVC8Model.h; sourceTree = "<group>"; };
+		01C810A61D07277B004BE1A1 /* WDDemoVC8Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDemoVC8Model.m; sourceTree = "<group>"; };
 		01D1522D1CF9408E0051589C /* WDAutoLayoutDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WDAutoLayoutDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01D152311CF9408E0051589C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		01D152331CF9408E0051589C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -363,6 +372,19 @@
 			path = test;
 			sourceTree = "<group>";
 		};
+		01C8109E1D0724DC004BE1A1 /* DemoVC8 */ = {
+			isa = PBXGroup;
+			children = (
+				01C8109F1D0724FB004BE1A1 /* WDDemoVC8.h */,
+				01C810A01D0724FB004BE1A1 /* WDDemoVC8.m */,
+				01C810A21D07253E004BE1A1 /* WDDemoVC8Cell.h */,
+				01C810A31D07253E004BE1A1 /* WDDemoVC8Cell.m */,
+				01C810A51D07277B004BE1A1 /* WDDemoVC8Model.h */,
+				01C810A61D07277B004BE1A1 /* WDDemoVC8Model.m */,
+			);
+			path = DemoVC8;
+			sourceTree = "<group>";
+		};
 		01D152241CF9408E0051589C = {
 			isa = PBXGroup;
 			children = (
@@ -446,6 +468,7 @@
 		01D152741CF942450051589C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				01C8109E1D0724DC004BE1A1 /* DemoVC8 */,
 				01AEB9421CFA26AA00F62078 /* DemoVC6 */,
 				01AEB9431CFA26AA00F62078 /* DemoVC7 */,
 				01AEB93A1CFA267F00F62078 /* DemoVC4 */,
@@ -705,6 +728,7 @@
 				01AEB9471CFA26AA00F62078 /* WDDemoVC6.m in Sources */,
 				01D152D11CF9450D0051589C /* WDDemoVC0.m in Sources */,
 				01AEB9571CFA26AA00F62078 /* FriendCircleCommentView.m in Sources */,
+				01C810A11D0724FB004BE1A1 /* WDDemoVC8.m in Sources */,
 				01D152D41CF945A40051589C /* WDBaseViewController.m in Sources */,
 				01D152CB1CF9433B0051589C /* WDRootViewController.m in Sources */,
 				01D152E31CF94A4D0051589C /* WDDemoVC3Cell.m in Sources */,
@@ -716,9 +740,11 @@
 				01D152351CF9408E0051589C /* AppDelegate.m in Sources */,
 				01D152DD1CF949EB0051589C /* WDDemoVC2.m in Sources */,
 				01AEB93D1CFA26AA00F62078 /* WDDemoVC4.m in Sources */,
+				01C810A41D07253E004BE1A1 /* WDDemoVC8Cell.m in Sources */,
 				01D152E01CF94A290051589C /* WDDemoVC3.m in Sources */,
 				01AEB9561CFA26AA00F62078 /* FriendCircleCell.m in Sources */,
 				01D152E61CF94CA10051589C /* WDDemoVC5.m in Sources */,
+				01C810A71D07277B004BE1A1 /* WDDemoVC8Model.m in Sources */,
 				01D152321CF9408E0051589C /* main.m in Sources */,
 				01D152CE1CF944260051589C /* WDRootCell.m in Sources */,
 				01D152D71CF947330051589C /* WDDemoVC1.m in Sources */,

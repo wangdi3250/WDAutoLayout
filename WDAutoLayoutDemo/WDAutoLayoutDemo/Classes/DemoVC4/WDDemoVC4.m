@@ -20,8 +20,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor]
-    ;
+    self.view.backgroundColor = [UIColor whiteColor];
     [self setupAutoWidthViewsWithCount:4 margin:10];
     [self setupAutoMarginViewsWithCount:4 itemWidth:60];
 }
@@ -30,6 +29,7 @@
 - (void)setupAutoWidthViewsWithCount:(NSInteger)count margin:(CGFloat)margin
 {
     _autoWidthViewsContainer = [[UIView alloc] init];
+    _autoWidthViewsContainer.clipsToBounds = YES;
     _autoWidthViewsContainer.backgroundColor = [UIColor redColor];
     [self.view addSubview:_autoWidthViewsContainer];
     

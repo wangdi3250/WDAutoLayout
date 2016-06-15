@@ -184,5 +184,11 @@
  *  label是否使用attributedString属性
  */
 @property (nonatomic, assign, getter=isAttributedContent) BOOL attributedContent;
+/**
+ *  设置label 最多显示多少行
+ *
+ *  @param lineCount 行数
+ */
+- (void)wd_setMaxNumberOfLines:(NSInteger)lineCount;
 
 @end

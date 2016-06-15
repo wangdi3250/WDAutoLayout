@@ -251,6 +251,7 @@ centerXEqualToSuperViewAndExtrasMargin;
  */
 @property (nonatomic, strong) WDCellSubviewFrame *cellSubviewFrame;
 @property (nonatomic, assign, getter=isDidFinishedCache) BOOL didFinishedCache;
+@property (nonatomic, assign,getter=isCellSubview) BOOL cellSubview;
 /**
  *  初始化方法
  *

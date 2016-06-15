@@ -683,6 +683,36 @@
         self.heightFix = YES;
     }
     
+    if(self.limitAutoresizingMaxWidth) {
+        if([view isKindOfClass:[UILabel class]]) {
+            UILabel *label = (UILabel *)view;
+            CGFloat maxWidth = self.limitAutoresizingMaxWidth.floatValue > 0 ?  self.limitAutoresizingMaxWidth.floatValue: MAXFLOAT;
+            if(label.text.length) {
+                if(!label.isAttributedContent) {
+                    CGSize size = [label.text boundingRectWithSize:CGSizeMake(maxWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : label.font} context:nil].size;
+                    label.wd_width = ceilf(size.width);
+                    if(self.limitExtrasWidth) {
+                        label.wd_width += [self.limitExtrasWidth floatValue];
+                    }
+                    self.widthFix = YES;
+                } else {
+                    [label sizeToFit];
+                    if(label.wd_width > maxWidth) {
+                        label.wd_width = maxWidth;
+                    }
+                    if(self.limitExtrasWidth) {
+                        label.wd_width += [self.limitExtrasWidth floatValue];
+                    }
+                }
+            } else {
+                label.wd_width = 0;
+                if(self.limitExtrasWidth) {
+                    label.wd_width += [self.limitExtrasWidth floatValue];
+                }
+            }
+        }
+    }
+    
     if(self.leftConstraint && self.leftConstraint.firstView == view) {
         if(view.superview == self.leftConstraint.secondView) {
             view.wd_left = self.leftConstraint.constant;
@@ -712,35 +742,6 @@
             view.wd_centerX = self.centerXEqualAndExtrasMarginConstraint.secondView.wd_width * 0.5 + self.centerXEqualAndExtrasMarginConstraint.constant;
         } else {
             view.wd_centerX = self.centerXEqualAndExtrasMarginConstraint.secondView.wd_centerX + self.centerXEqualAndExtrasMarginConstraint.constant;
-        }
-    }
-    if(self.limitAutoresizingMaxWidth) {
-        if([view isKindOfClass:[UILabel class]]) {
-            UILabel *label = (UILabel *)view;
-            CGFloat maxWidth = self.limitAutoresizingMaxWidth.floatValue > 0 ?  self.limitAutoresizingMaxWidth.floatValue: MAXFLOAT;
-            if(label.text.length) {
-                if(!label.isAttributedContent) {
-                    CGSize size = [label.text boundingRectWithSize:CGSizeMake(maxWidth, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : label.font} context:nil].size;
-                    label.wd_width = ceilf(size.width);
-                    if(self.limitExtrasWidth) {
-                        label.wd_width += [self.limitExtrasWidth floatValue];
-                    }
-                    self.widthFix = YES;
-                } else {
-                    [label sizeToFit];
-                    if(label.wd_width > maxWidth) {
-                        label.wd_width = maxWidth;
-                    }
-                    if(self.limitExtrasWidth) {
-                        label.wd_width += [self.limitExtrasWidth floatValue];
-                    }
-                }
-            } else {
-                label.wd_width = 0;
-                if(self.limitExtrasWidth) {
-                    label.wd_width += [self.limitExtrasWidth floatValue];
-                }
-            }
         }
     }
     
@@ -843,7 +844,9 @@
     if(self.heightEqualWidthConstraint) {
         view.wd_height = view.wd_width;
     }
-    
+    if(view.wd_didFinishedAutoLayout) {
+        view.wd_didFinishedAutoLayout(view.frame);
+    }
     if(view.wd_bottomViewArray || view.wd_rightViewArray) {
         [view layoutSubviews];
     }
@@ -944,7 +947,7 @@
                     view.wd_width += [self.limitExtrasWidth floatValue];
                 }
             }
-            view.wd_right = self.rightEqualConstraint.secondView.wd_right - self.rightEqualAndExtrasMarginConstraint.constant;
+            view.wd_right = self.rightEqualAndExtrasMarginConstraint.secondView.wd_right - self.rightEqualAndExtrasMarginConstraint.constant;
         }
     }
 }

@@ -18,6 +18,7 @@ NSString * const demo4Description = @"1.设置间距固定自动调整宽度的�
 NSString * const demo5Description = @"1.利用普通view的内容自适应功能添加tableheaderview\n2.利用自动布局功能实现cell内部图文排布，图片可根据原始尺寸按比例缩放后展示\n3.利用“普通版tableview的cell高度自适应”完成tableview的排布";
 NSString * const demo6Description = @"利用SDAutoLayout仿制微信朋友圈。";
 NSString * const demo7Description = @"scroll任意布局内容自适应自动布局";
+NSString * const demo8Description = @"cell的多级缓存";
 
 @interface WDRootViewController ()
 
@@ -34,7 +35,7 @@ NSString * const demo7Description = @"scroll任意布局内容自适应自动布
 - (NSArray *)dataArray
 {
     if(!_dataArray) {
-            _dataArray = @[demo0Description, demo1Description, demo2Description, demo3Description, demo4Description, demo5Description,demo6Description,demo7Description];
+            _dataArray = @[demo0Description, demo1Description, demo2Description, demo3Description, demo4Description, demo5Description,demo6Description,demo7Description,demo8Description];
     }
     return _dataArray;
 }
