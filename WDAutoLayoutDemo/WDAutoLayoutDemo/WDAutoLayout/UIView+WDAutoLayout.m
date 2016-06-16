@@ -145,7 +145,9 @@
         if(!view) continue;
         if(!layout.isDidFinishedCache) {
             [layout startLayout];
-            layout.didFinishedCache = YES;
+            if(!view.wd_bottomViewArray.count && !view.wd_bottomViewArray.count) {
+                layout.didFinishedCache = YES;
+            }
             layout.cellSubview = YES;
         }
         [view wd_calculateCellSubviewFrame];
@@ -205,6 +207,11 @@
 - (void)wd_adjustMySelfFrame
 {
     if([self isKindOfClass:[UITableViewCell class]] || (!self.wd_bottomViewArray.count && !self.wd_rightViewArray.count)) return;
+    if(self.wd_layout.isCellSubview && self.wd_layout.isDidFinishedCache) {
+        return;
+    } else if(self.wd_layout.isCellSubview) {
+        self.wd_layout.didFinishedCache = YES;
+    }
     CGFloat contentHeight = 0;
     CGFloat contentWidth = 0;
     if(self.wd_bottomViewArray.count) {
