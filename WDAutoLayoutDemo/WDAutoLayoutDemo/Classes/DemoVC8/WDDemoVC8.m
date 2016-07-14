@@ -9,8 +9,9 @@
 #import "WDDemoVC8.h"
 #import "WDAutoLayout.h"
 #import "WDDemoVC8Cell.h"
+#import "WDAutoLayout.h"
 
-@interface WDDemoVC8 ()
+@interface WDDemoVC8 ()<WDTableViewExtensionProtocol>
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) NSArray *titleArray;
@@ -35,6 +36,7 @@
             WDDemoVC8Model *model = [[WDDemoVC8Model alloc] init];
             model.topTitle = [NSString stringWithFormat:@"%zd_top_%@",i + 1,title];
             model.bottomTitle = [NSString stringWithFormat:@"%zd_bottom_%@",i + 1,title];
+            model.identify = [NSString stringWithFormat:@"%zd",i];
             [_dataArray addObject:model];
         }
     }
@@ -65,6 +67,13 @@
         WDDemoVC8Cell *demoCell = (WDDemoVC8Cell *)cell;
         demoCell.model = self.dataArray[indexPath.row];
     }];
+}
+
+- (id<NSCopying>)tableView:(UITableView *)tableView identifierForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    WDDemoVC8Model *model = self.dataArray[indexPath.row];
+    return model.identify;
+    
 }
 
 @end

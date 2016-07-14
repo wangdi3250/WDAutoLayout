@@ -8,15 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class WDIndexPathCache;
+@protocol WDTableViewExtensionProtocol <NSObject>
 
-@protocol WDTableViewRefreshDataDelegate <NSObject>
-
-- (void)tableViewReloadData:(UITableView *)tableView indexPathCache:(WDIndexPathCache *)indexPathCachche;
+- (id<NSCopying>)tableView:(UITableView *)tableView identifierForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
-@interface WDIndexPathCache : NSObject
+@interface WDAutoLayoutCache : NSObject
 /**
  *  初始化方法
  *
@@ -28,18 +26,18 @@
 /**
  *  从缓存中读取高度
  *
- *  @param indexPath cell对应的一行
+ *  @param key 缓存的一行的标识
  *
- *  @return 高度，如果不存在，返回nil
+ *  @return 高度
  */
-- (NSNumber *)heightWithIndexPath:(NSIndexPath *)indexPath;
+- (NSNumber *)heightWithKey:(id<NSCopying>)key;
 /**
  *  缓存高度
  *
- *  @param indexPath cell对应的一行
- *  @param height    要缓存的高度
+ *  @param key    缓存的一行的标识
+ *  @param height 高度
  */
-- (void)cacheHeightWithIndexPath:(NSIndexPath *)indexPath height:(NSNumber *)height;
+- (void)cacheHeightWithKey:(id<NSCopying>)key height:(NSNumber *)height;
 /**
  *  从缓存中读取cell
  *
@@ -56,30 +54,24 @@
  */
 - (void)cacheCellWithCellClass:(Class)cellClass cell:(UITableViewCell *)cell;
 /**
- *  读取cell上的view的WDCellsubviewFrame模型
+ *  缓存cell上的所有子控件的位置
  *
- *  @param indexPath cell 对应的一行
- *
- *  @return 这个cell中的的所有子控件的WDCellsubviewFrame模型，一个view对应一个WDCellsubviewFrame模型
+ *  @param key   一行的标识
+ *  @param frame cell上所有子控件的信息
  */
-- (NSArray *)subviewFramesWithIndexPath:(NSIndexPath *)indexPath;
+- (void)cacheSubviewFramesWithKey:(id <NSCopying>)key frames:(NSArray *)frame;
 /**
- *  缓存cell上的view的WDCellsubviewFrame模型
+ *  从缓存中读取cell的子控件的缓存数据
  *
- *  @param indexPath cell 对应的一行
- *  @param frame     cell上的view的WDCellsubviewFrame模型
+ *  @param cacheKey 一行的标识
+ *
+ *  @return cell的子控件的缓存数据
  */
-- (void)cacheSubviewFramesWithIndexPath:(NSIndexPath *)indexPath frames:(NSArray *)frame;
+- (NSArray *)subviewFrameWithCacheKey:(id<NSCopying>)cacheKey;
 /**
- *  清楚所有缓存
+ *  清除所有缓存
  */
 - (void)clearAllCache;
-/**
- *  清楚指定行的缓存
- *
- *  @param indexPaths 指定的行
- */
-- (void)clearCacheWithIndexPath:(NSArray *)indexPaths;
 /**
  *  获取缓存的数量
  *
@@ -93,34 +85,26 @@
 /**
  *  缓存类，tableView 通过控制缓存对象来控制缓存
  */
-@property (nonatomic, strong) WDIndexPathCache *indexPathCache;
+@property (nonatomic, strong, readonly) WDAutoLayoutCache *wd_cache;
 /**
  *  返回cell某一行的高度，内部自动计算，并且有缓存
  *
  *  @param cellClass     cell的类型
- *  @param indexPath     cell 的一行
+ *  @param cacheKey      缓存的一行的标识
  *  @param configuration 回调的block，用来给外部配置数据
  *
  *  @return 返回高度
  */
-- (NSNumber *)wd_heightWithCellClass:(Class)cellClass indexPath:(NSIndexPath *)indexPath configuration:(void (^)(UITableViewCell *cell))configuration;
-/**
- *  读取cell上的view的WDCellSubviewFrame模型
- *
- *  @param indexPath cell 的一行
- *
- *  @return WDCellSubviewFrame 模型的数组
- */
-- (NSArray *)wd_subviewFramesWithIndexPath:(NSIndexPath *)indexPath;
+- (NSNumber *)wd_heightWithCellClass:(Class)cellClass indexPath:(NSIndexPath *)indexPath cacheKey:(id <NSCopying>)cacheKey configuration:(void (^)(UITableViewCell *cell))configuration;
+- (NSArray *)wd_subviewFramwWithCacheKey:(id<NSCopying>)cacheKey;
+
 @end
 
 @interface UITableViewCell (WDAutoLayout)
 
 /**
  *  自动计算高度
- *
  *  @param tableView     tableView
- *  @param indexPath     cell的一行
  *  @param configuration 回调的block，用来给外部配置数据
  *
  *  @return 高度
