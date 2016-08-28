@@ -49,6 +49,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *ID = @"cell";
+    NSLog(@"cellForRow --- %zd",indexPath.row);
     WDDemoVC8Cell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
     if(!cell) {
 
@@ -61,6 +62,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"height --- %zd",indexPath.row);
     return [WDDemoVC8Cell wd_heightForRowWithTableView:tableView atIndexPath:indexPath configuration:^(UITableViewCell *cell) {
         WDDemoVC8Cell *demoCell = (WDDemoVC8Cell *)cell;
         demoCell.model = self.dataArray[indexPath.row];

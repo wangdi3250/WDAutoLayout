@@ -287,11 +287,9 @@
         CGFloat autoLayoutFixWidth = self.wd_autoLayoutFixWidth;
         if(self.wd_fixWidthLayout) {
             w = autoLayoutFixWidth;
-            if(rowCount > 1) {
-                hormargin = (self.wd_width - rowCount * w) / (rowCount - 1);
-            }
+            hormargin = (self.wd_width - rowCount * w) / (rowCount + 1);
         } else {
-            w = (self.wd_width - (rowCount - 1) * autoLayoutHorMargin) / rowCount;
+            w = (self.wd_width - (rowCount + 1) * autoLayoutHorMargin) / rowCount;
             hormargin = autoLayoutHorMargin;
         }
         
@@ -301,7 +299,7 @@
             UIView *view = self.wd_autoLayoutArray[i];
             if(i < self.wd_rowCount) {
                 if(i == 0) {
-                    view.wd_layout.leftEqualToView(refView).topSpaceToView(refView,autoLayoutVerMargin).width(w);
+                    view.wd_layout.leftSpaceToView(refView,hormargin).topSpaceToView(refView,autoLayoutVerMargin).width(w);
                 } else {
                     view.wd_layout.leftSpaceToView(refView,hormargin).topEqualToView(refView).width(w);
                 }

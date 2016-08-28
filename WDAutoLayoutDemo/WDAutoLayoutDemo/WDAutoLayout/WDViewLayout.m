@@ -703,6 +703,7 @@
                     if(self.limitExtrasWidth) {
                         label.wd_width += [self.limitExtrasWidth floatValue];
                     }
+                    self.widthFix = YES;
                 }
             } else {
                 label.wd_width = 0;
