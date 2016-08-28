@@ -12,5 +12,6 @@
 
 @property (nonatomic, copy) NSString *topTitle;
 @property (nonatomic, copy) NSString *bottomTitle;
+@property (nonatomic, copy) NSString *identify;
 
 @end

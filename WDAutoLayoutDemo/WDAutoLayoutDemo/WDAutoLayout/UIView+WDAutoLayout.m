@@ -159,8 +159,21 @@
     UIView *contentView = ((UITableViewCell *)self).contentView;
     NSArray *layoutArray = contentView.wd_layoutArray;
     if(!layoutArray.count) return;
-    NSArray *cellSubviewFrames = [contentView.wd_tableView wd_subviewFramesWithIndexPath:contentView.wd_indexPath];
+    id<NSCopying>key = nil;
+    id dataSource = contentView.wd_tableView.dataSource;
+    NSArray *cellSubviewFrames = nil;
+    if(dataSource && [dataSource respondsToSelector:@selector(tableView:identifierForRowAtIndexPath:)] && contentView.wd_tableView && contentView.wd_indexPath) {
+        key = [dataSource tableView:contentView.wd_tableView identifierForRowAtIndexPath:contentView.wd_indexPath];
+    }
+    if(!key && contentView.wd_indexPath && contentView.wd_tableView) {
+        key = [NSString stringWithFormat:@"%zd%zd",contentView.wd_indexPath.section,contentView.wd_indexPath.row];
+    }
+    if(key) {
+        cellSubviewFrames = [contentView.wd_tableView wd_subviewFramwWithCacheKey:key];
+    }
     if(cellSubviewFrames.count != layoutArray.count) {
+        [self wd_resetLayoutDidFinished:contentView.wd_layoutArray];
+        [contentView wd_calculateCellSubviewFrame];
         return;
     }
     for(int i = 0;i < layoutArray.count;i++) {
@@ -318,7 +331,7 @@
     [self wd_setupWidthEqualSubviews];
     [self wd_setupHeightEqualSubviews];
     [self wd_setupAutoLayout];
-    if([self isKindOfClass:NSClassFromString(@"UITableViewCellContentView")] && self.wd_tableView && self.wd_indexPath) {
+    if([self isKindOfClass:NSClassFromString(@"UITableViewCellContentView")]) {
         [self wd_calculateCellSubviewFrame];
     } else if([self isKindOfClass:[UITableViewCell class]] && ((UITableViewCell *)self).contentView.wd_layoutArray.count) {
         [self wd_adjustCellSubviewFrame];

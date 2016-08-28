@@ -22,6 +22,7 @@
 {
     if(self =[super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.backgroundColor = [UIColor blackColor];
         [self setupSubview];
     }
     return self;

@@ -15,6 +15,12 @@
     1. >> 设置cell高度自适应：
     // cell布局设置好之后调用此方法就可以实现高度自适应（注意：如果用高度自适应则不要再以cell的底边为参照去布局其子view）
        [cell wd_setupBottomViewWithBottomViewArray:@[self.contentLabel] marginToBottom:margin];
+       对于缓存的key，我这里面提供了一种回调的接口，遵守WDTableViewExtensionProtocol这个协议,你需要手动的告诉我cell每一行所对应的key，如果你不实现这个方法，默认会以indexPath作为key，不过这样在数据源发生改变的时候会有些问题，容易出现缓存窜行的问题，因为，最后实现这个方法返回每一行的唯一标识。一般返回每一行的数据通常会有一个id字段，返回这个即可,具体可以参考demo8中的例子。
+      - (id<NSCopying>)tableView:(UITableView *)tableView identifierForRowAtIndexPath:(NSIndexPath *)indexPath
+       {
+         WDDemoVC8Model *model = self.dataArray[indexPath.row];
+         return model.identify;
+       }
        为了实现缓存机制，请加上这句代码
        - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
            [cell wd_setupTableView:tableView indexPath:indexPath];
@@ -25,6 +31,8 @@
         WDDemoVC5Cell *demoCell = (WDDemoVC5Cell *)cell;
         demoCell.model = self.dataArray[indexPath.row];
     }];
+    3. >> 缓存的管理
+    我为tableView添加了一个wd_cache对象专门管理缓存，可以操作这个对象进行缓存的管理，如清空缓存，查看缓存数量。
     
 ## 普通view的自动布局：
     /* 用法一 */

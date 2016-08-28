@@ -11,7 +11,7 @@
 #import "WDViewLayout.h"
 #import <objc/runtime.h>
 
-@interface WDIndexPathCache()
+@interface WDAutoLayoutCache()
 
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, strong) NSMutableDictionary *cellCache;
@@ -20,12 +20,12 @@
 
 @end
 
-@implementation WDIndexPathCache
+@implementation WDAutoLayoutCache
 
 - (instancetype)initWithTableView:(UITableView *)tableView
 {
     if(self = [super init]) {
-        self.tableView = tableView;
+        _tableView = tableView;
     }
     return self;
 }
@@ -60,27 +60,16 @@
     [self.subViewFramesCache removeAllObjects];
 }
 
-- (void)clearCacheWithIndexPath:(NSArray *)indexPaths
+- (NSNumber *)heightWithKey:(id<NSCopying>)key
 {
-    for(NSIndexPath *indexPath in indexPaths) {
-        NSString *cacheKey = [NSString stringWithFormat:@"%zd%zd",indexPath.section,indexPath.row];
-        [self.heightCache removeObjectForKey:cacheKey];
-        [self.subViewFramesCache removeObjectForKey:cacheKey];
-    }
+    if(!key) return nil;
+    return self.heightCache[key];
 }
 
-- (NSNumber *)heightWithIndexPath:(NSIndexPath *)indexPath
+- (void)cacheHeightWithKey:(id<NSCopying>)key height:(NSNumber *)height
 {
-    if(!indexPath) return nil;
-    NSString *cacheKey = [NSString stringWithFormat:@"%zd%zd",indexPath.section,indexPath.row];
-    return self.heightCache[cacheKey];
-}
-
-- (void)cacheHeightWithIndexPath:(NSIndexPath *)indexPath height:(NSNumber *)height
-{
-    if(!indexPath || !height) return;
-    NSString *cacheKey = [NSString stringWithFormat:@"%zd%zd",indexPath.section,indexPath.row];
-    self.heightCache[cacheKey] = height;
+    if(!key) return;
+    self.heightCache[key] = height;
 }
 
 - (UITableViewCell *)cellWithCellClass:(Class)cellClass
@@ -95,19 +84,16 @@
     self.cellCache[NSStringFromClass(cellClass)] = cell;
 }
 
-- (NSArray *)subviewFramesWithIndexPath:(NSIndexPath *)indexPath
+- (NSArray *)subviewFrameWithCacheKey:(id<NSCopying>)cacheKey
 {
-    if(!indexPath) return nil;
-    NSString *cacheKey = [NSString stringWithFormat:@"%zd%zd",indexPath.section,indexPath.row];
-
+    if(!cacheKey) return nil;
     return self.subViewFramesCache[cacheKey];
 }
 
-- (void)cacheSubviewFramesWithIndexPath:(NSIndexPath *)indexPath frames:(NSArray *)frame
+- (void)cacheSubviewFramesWithKey:(id <NSCopying>)key frames:(NSArray *)frame
 {
-    if(!indexPath || !frame.count) return;
-    NSString *cacheKey = [NSString stringWithFormat:@"%zd%zd",indexPath.section,indexPath.row];
-    self.subViewFramesCache[cacheKey] = frame;
+    if(!key || !frame.count) return;
+    self.subViewFramesCache[key] = frame;
 }
 
 - (NSInteger)cacheCount
@@ -118,29 +104,27 @@
 @end
 
 @implementation UITableView (WDAutoLayout)
-- (WDIndexPathCache *)indexPathCache
-{
-    return objc_getAssociatedObject(self, _cmd);
 
+- (WDAutoLayoutCache *)wd_cache
+{
+    WDAutoLayoutCache *cache = objc_getAssociatedObject(self, _cmd);
+    if(!cache) {
+        cache = [[WDAutoLayoutCache alloc] initWithTableView:self];
+        objc_setAssociatedObject(self, _cmd, cache, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return cache;
 }
 
-- (void)setIndexPathCache:(WDIndexPathCache *)indexPathCache
+- (NSNumber *)wd_heightWithCellClass:(Class)cellClass indexPath:(NSIndexPath *)indexPath cacheKey:(id<NSCopying>)cacheKey configuration:(void (^)(UITableViewCell *cell))configuration
 {
-    objc_setAssociatedObject(self, @selector(indexPathCache), indexPathCache, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
-}
-
-- (NSNumber *)wd_heightWithCellClass:(Class)cellClass indexPath:(NSIndexPath *)indexPath configuration:(void (^)(UITableViewCell *cell))configuration
-{
-    if(!cellClass || !indexPath) return nil;
-    UITableViewCell *cell = [self.indexPathCache cellWithCellClass:cellClass];
+    if(!cellClass) return nil;
+    UITableViewCell *cell = [self.wd_cache cellWithCellClass:cellClass];
     if(!cell) {
-        NSString *identifier = NSStringFromClass(cellClass);
+        NSString *identifier = [NSString stringWithFormat:@"wd_%@",NSStringFromClass(cellClass)];
         [self registerClass:cellClass forCellReuseIdentifier:identifier];
         cell = [self dequeueReusableCellWithIdentifier:identifier];
-        [self.indexPathCache cacheCellWithCellClass:cellClass cell:cell];
+        [self.wd_cache cacheCellWithCellClass:cellClass cell:cell];
     }
-    [cell wd_setupTableView:self indexPath:indexPath];
     if(configuration) {
         configuration(cell);
     }
@@ -150,17 +134,21 @@
     }
     [self wd_resetLayoutDidFinished:cell.contentView.wd_layoutArray];
     [cell.contentView layoutSubviews];
-    [cell wd_setupTableView:nil indexPath:nil];
     CGFloat height = 0;
     if(cell.wd_bottomViewArray.count) {
         for(UIView *view in cell.wd_bottomViewArray) {
             height = MAX(height, view.wd_bottom);
         }
         height += cell.wd_marginToBottom;
+    } else {
+        for(UIView *view in cell.contentView.subviews) {
+            height = MAX(height, view.wd_bottom);
+        }
+        height += cell.wd_marginToBottom;
     }
-    [self.indexPathCache cacheHeightWithIndexPath:indexPath height:@(height)];
+    [self.wd_cache cacheHeightWithKey:cacheKey height:@(height)];
     NSArray *subviewFrames = [self wd_subviewFramesWithLayoutArray:cell.contentView.wd_layoutArray];
-    [self.indexPathCache cacheSubviewFramesWithIndexPath:indexPath frames:subviewFrames];
+    [self.wd_cache cacheSubviewFramesWithKey:cacheKey frames:subviewFrames];
     return @(height);
 }
 
@@ -180,9 +168,9 @@
     return subviewFrames;
 }
 
-- (NSArray *)wd_subviewFramesWithIndexPath:(NSIndexPath *)indexPath
+- (NSArray *)wd_subviewFramwWithCacheKey:(id<NSCopying>)cacheKey
 {
-    return [self.indexPathCache subviewFramesWithIndexPath:indexPath];
+    return [self.wd_cache subviewFrameWithCacheKey:cacheKey];
 }
 
 - (void)wd_resetLayoutDidFinished:(NSArray *)layoutArray
@@ -198,54 +186,26 @@
     }
 }
 
-+ (void)load
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        SEL systemSEL[] = {@selector(reloadData),@selector(reloadRowsAtIndexPaths:withRowAnimation:)};
-        SEL customerSEL[] = {@selector(wd_reloadData),@selector(wd_reloadRowsAtIndexPaths:withRowAnimation:)};
-        for(int i = 0;i < sizeof(systemSEL) / sizeof(SEL);i++) {
-           Method systemMethod = class_getInstanceMethod([UITableView class],systemSEL[i]);
-            Method custmerMethod = class_getInstanceMethod([UITableView class],customerSEL[i]);
-            method_exchangeImplementations(systemMethod, custmerMethod);
-        }
-    });
-}
-
-- (void)wd_reloadData
-{
-    id <WDTableViewRefreshDataDelegate> dataSource = (id <WDTableViewRefreshDataDelegate>)self.dataSource;
-    if([dataSource respondsToSelector:@selector(tableViewReloadData:indexPathCache:)]) {
-        [dataSource tableViewReloadData:self indexPathCache:self.indexPathCache];
-    } else {
-        [self.indexPathCache clearAllCache];
-    }
-    [self wd_reloadData];
-}
-
-- (void)wd_reloadRowsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths withRowAnimation:(UITableViewRowAnimation)animation
-{
-    if(!indexPaths.count) return;
-    [self.indexPathCache clearCacheWithIndexPath:indexPaths];
-    [self wd_reloadRowsAtIndexPaths:indexPaths withRowAnimation:animation];
-}
-
 @end
 
 @implementation UITableViewCell (WDAutoLayout)
 
 + (CGFloat)wd_heightForRowWithTableView:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath configuration:(void (^)(UITableViewCell *))configuration
 {
-    WDIndexPathCache *indexPathCache = tableView.indexPathCache;
-    if(!indexPathCache) {
-        indexPathCache = [[WDIndexPathCache alloc] initWithTableView:tableView];
-        tableView.indexPathCache = indexPathCache;
+    WDAutoLayoutCache *cache = tableView.wd_cache;
+    id<NSCopying> key = nil;
+    id dataSource = tableView.dataSource;
+    if(dataSource && [dataSource respondsToSelector:@selector(tableView:identifierForRowAtIndexPath:)]) {
+        key = [dataSource tableView:tableView identifierForRowAtIndexPath:indexPath];
     }
-    NSNumber *height = [indexPathCache heightWithIndexPath:indexPath];
+    if(!key) {
+        key = [NSString stringWithFormat:@"%zd%zd",indexPath.section,indexPath.row];
+    }
+    NSNumber *height = [cache heightWithKey:key];
     if(height) {
         return [height floatValue];
     } else {
-        height = [tableView wd_heightWithCellClass:self indexPath:indexPath configuration:configuration];
+        height = [tableView wd_heightWithCellClass:self indexPath:indexPath cacheKey:key configuration:configuration];
         return [height floatValue];
     }
     
