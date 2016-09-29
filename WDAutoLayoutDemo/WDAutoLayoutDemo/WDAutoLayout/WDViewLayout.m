@@ -40,6 +40,8 @@
 @property (nonatomic, strong) NSNumber *limitExtrasHeight;
 @property (nonatomic, strong) WDLayoutConstraint *widthRatioToViewConstraint;
 @property (nonatomic, strong) WDLayoutConstraint *heightRatioToViewConstraint;
+@property (nonatomic, strong) WDLayoutConstraint *fixedWidthConstraint;
+@property (nonatomic, strong) WDLayoutConstraint *fixedHeightConstraint;
 
 @end
 
@@ -94,6 +96,8 @@
 @synthesize centerYEqualToSuperViewAndExtrasMargin = _centerYEqualToSuperViewAndExtrasMargin;
 @synthesize centerXEqualToSuperView = _centerXEqualToSuperView;
 @synthesize centerYEqualToSuperView = _centerYEqualToSuperView;
+@synthesize fixedWidth = _fixedWidth;
+@synthesize fixedHeight = _fixedHeight;
 
 + (instancetype)layoutWithNeedAutoLayoutView:(UIView *)view
 {
@@ -541,6 +545,32 @@
     return _heightEqualWidth;
 }
 
+- (WDFixedWidthHeight)fixedWidth
+{
+    if(!_fixedWidth) {
+        __weak typeof(self) weakSelf = self;
+        _fixedWidth = ^{
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strongSelf->_fixedWidthConstraint = [[WDLayoutConstraint alloc] init];
+            return weakSelf;
+        };
+    }
+    return _fixedWidth;
+}
+
+- (WDFixedWidthHeight)fixedHeight
+{
+    if(!_fixedHeight) {
+        __weak typeof(self) weakSelf = self;
+        _fixedHeight = ^{
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strongSelf->_fixedHeightConstraint = [[WDLayoutConstraint alloc] init];
+            return weakSelf;
+        };
+    }
+    return _fixedHeight;
+}
+
 - (WDWidthHeight)widthHeightBlockWithKey:(NSString *)key
 {
     __weak typeof(self) weakSelf = self;
@@ -703,6 +733,7 @@
                     if(self.limitExtrasWidth) {
                         label.wd_width += [self.limitExtrasWidth floatValue];
                     }
+                    self.widthFix = YES;
                 }
             } else {
                 label.wd_width = 0;
@@ -750,7 +781,7 @@
         CGFloat value = [self.heightRatio floatValue];
         self.heightFix = YES;
         if(value > 0) {
-            view.wd_height = view.wd_width * value;
+            view.wd_height = ceilf(view.wd_width * value);
             if(self.limitExtrasHeight) {
                 view.wd_height += [self.limitExtrasHeight floatValue];
             }

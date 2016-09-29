@@ -192,3 +192,57 @@
 - (void)wd_setMaxNumberOfLines:(NSInteger)lineCount;
 
 @end
+
+@interface UIScrollView (WDAutoLayout)
+/**
+ *  以下属性为框架内部使用，无需关心
+ */
+@property (nonatomic, strong) UIView *wd_contentSizeHeightBottomView;
+@property (nonatomic, strong) UIView *wd_contentSizeWidthRightView;
+@property (nonatomic, strong) NSArray *wd_contentSizeHeightBottomViewArray;
+@property (nonatomic, strong) NSArray *wd_contentSizeWidthRightViewArray;
+@property (nonatomic, assign) CGFloat wd_contentSizeHeightMarginToBottom;
+@property (nonatomic, assign) CGFloat wd_contentSizeWidthMarginToRight;
+/**
+ *  设置scrollView的contentSize自动随着view来变化
+ *
+ *  @param bottomView     contentSizeHeight 所参考的最底部的view
+ *  @param marginToBottom 间距
+ */
+- (void)wd_setupContentSizeHeightWithBottomView:(UIView *)bottomView contentSizeHeightmarginToBottom:(CGFloat)marginToBottom;
+- (void)wd_setupContentSizeHeightWithBottomViewArray:(NSArray *)bottomViewArray contentSizeHeightmarginToBottom:(CGFloat)marginToBottom;
+/**
+ *  设置scrollView的contentSize自动随着view来变化
+ *
+ *  @param rightView     contentSizeWidth 所参考的最右边的view
+ *  @param marginToRight 间距
+ */
+- (void)wd_setupContentSizeWidthWithRightView:(UIView *)rightView contentSizeWidthmarginToRight:(CGFloat)marginToRight;
+- (void)wd_setupContentSizeWidthWithRightViewArray:(NSArray *)rightViewArray contentSizeWidthmarginToRight:(CGFloat)marginToRight;
+
+@end
+
+@interface UIButton (WDAutoLayout)
+/**
+ *  UIButton根据文字自动计算宽度
+ *
+ *  @param horMargin 水平间距
+ *  @param height    button 的高度
+ */
+- (void)wd_buttonWidthAutoresizingWithMargin:(CGFloat)horMargin fixHeight:(CGFloat)height;
+/**
+ *  UIButton根据文字自动计算高度
+ *
+ *  @param verMargin 竖直间距
+ *  @param width     button 的宽度
+ */
+- (void)wd_buttonHeightAutoresizingWithMargin:(CGFloat)verMargin fixWidth:(CGFloat)width;
+/**
+ *  UIButton 根据文字自动计算宽高
+ *
+ *  @param horMargin 水平间距
+ *  @param verMargin 竖直间距
+ */
+- (void)wd_buttonWidthHeightAutoresizingWithHorMargin:(CGFloat)horMargin verMargin:(CGFloat)verMargin;
+
+@end

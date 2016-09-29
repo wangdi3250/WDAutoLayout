@@ -27,6 +27,7 @@ typedef WDViewLayout *(^WDSpaceToSuperView)(UIEdgeInsets edgeInsets);
 typedef WDViewLayout *(^WDAutoHeightRatio)(CGFloat value);
 typedef WDViewLayout *(^WDWidthHeightEqualToView)(UIView *toView);
 typedef WDViewLayout *(^WDExtrasWidthHeight)(CGFloat value);
+typedef WDViewLayout *(^WDFixedWidthHeight)();
 
 @interface WDViewLayout : NSObject<UIGestureRecognizerDelegate>
 /**
@@ -226,6 +227,14 @@ centerXEqualToSuperViewAndExtrasMargin;
  *  高度自适应，如果是UILabel，传入0即可实现自适应高度 参数 value: 高度和宽度的比值
  */
 @property (nonatomic, copy, readonly) WDAutoHeightRatio autoHeightRatio;
+/**
+ *  宽度固定约束， 设置了这个，就不会帮你自动计算宽度
+ */
+@property (nonatomic, copy, readonly) WDFixedWidthHeight fixedWidth;
+/**
+ *  高度固定约束，设置了这个，就不会帮你自动计算高度
+ */
+@property (nonatomic, copy, readonly) WDFixedWidthHeight fixedHeight;
 /**
  *  需要自动布局的view
  */

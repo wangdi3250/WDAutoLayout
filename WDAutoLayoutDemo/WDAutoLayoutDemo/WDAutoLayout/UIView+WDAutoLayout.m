@@ -54,6 +54,13 @@
     self.frame = CGRectZero;
     NSInteger index = 0;
     if (oldLayout) {
+        [self wd_setupBottomViewWithBottomViewArray:nil marginToBottom:0];
+        [self wd_setupRightViewWithRightViewArray:nil marginToRight:0];
+        if([self isKindOfClass:[UIScrollView class]]) {
+            UIScrollView *scrollView = self;
+            [scrollView wd_setupContentSizeWidthWithRightViewArray:nil contentSizeWidthmarginToRight:0];
+            [scrollView wd_setupContentSizeHeightWithBottomViewArray:nil contentSizeHeightmarginToBottom:0];
+        }
         index = [self.superview.wd_layoutArray indexOfObject:oldLayout];
         NSInteger count = self.superview.wd_layoutArray.count;
         if(index < count) {
@@ -219,29 +226,54 @@
 
 - (void)wd_adjustMySelfFrame
 {
-    if([self isKindOfClass:[UITableViewCell class]] || (!self.wd_bottomViewArray.count && !self.wd_rightViewArray.count)) return;
+    if([self isKindOfClass:[UITableViewCell class]]) return;
+    if([self isKindOfClass:[UIScrollView class]]) {
+        UIScrollView *scrollView = (UIScrollView *)self;
+        if(!scrollView.wd_contentSizeHeightBottomViewArray.count && !scrollView.wd_contentSizeWidthRightViewArray.count && !scrollView.wd_bottomViewArray.count && !scrollView.wd_rightViewArray.count) return;
+    } else if([self isKindOfClass:[UITableViewCell class]]) {
+        return;
+    } else {
+        if(!self.wd_bottomViewArray.count && !self.wd_rightViewArray.count) {
+            return;
+        }
+    }
+    
     if(self.wd_layout.isCellSubview && self.wd_layout.isDidFinishedCache) {
         return;
     } else if(self.wd_layout.isCellSubview) {
         self.wd_layout.didFinishedCache = YES;
     }
-    CGFloat contentHeight = 0;
-    CGFloat contentWidth = 0;
+    CGFloat finalHeight = 0;
+    CGFloat finalWidth = 0;
     if(self.wd_bottomViewArray.count) {
         for(UIView *subView in self.wd_bottomViewArray) {
-            contentHeight = MAX(contentHeight, subView.wd_bottom);
+            finalHeight = MAX(finalHeight, subView.wd_bottom);
         }
-        contentHeight += self.wd_marginToBottom;
+        finalHeight += self.wd_marginToBottom;
     }
     if(self.wd_rightViewArray.count) {
         for(UIView *subView in self.wd_rightViewArray) {
-            contentWidth = MAX(contentWidth, subView.wd_right);
+            finalWidth = MAX(finalWidth, subView.wd_right);
         }
-        contentWidth += self.wd_marginToRight;
+        finalWidth += self.wd_marginToRight;
     }
     
     if([self isKindOfClass:[UIScrollView class]]) {
+        CGFloat contentWidth = 0;
+        CGFloat contentHeight = 0;
         UIScrollView *scrollView = (UIScrollView *)self;
+        if(scrollView.wd_contentSizeHeightBottomViewArray.count) {
+            for(UIView *subView in scrollView.wd_contentSizeHeightBottomViewArray) {
+                contentHeight = MAX(contentHeight, subView.wd_bottom);
+            }
+            contentHeight += scrollView.wd_contentSizeHeightMarginToBottom;
+        }
+        if(scrollView.wd_contentSizeWidthRightViewArray.count) {
+            for(UIView *subView in scrollView.wd_contentSizeWidthRightViewArray) {
+                contentWidth = MAX(contentWidth, subView.wd_right);
+            }
+            contentWidth += scrollView.wd_contentSizeWidthMarginToRight;
+        }
         CGSize contentSize = scrollView.contentSize;
         if(contentWidth > 0) {
             contentSize.width = contentWidth;
@@ -255,23 +287,22 @@
         if (!CGSizeEqualToSize(contentSize, scrollView.contentSize)) {
             scrollView.contentSize = contentSize;
         }
-    } else {
-        if(self.wd_bottomViewArray.count && ceil(self.wd_height) != ceil(contentHeight)) {
-            self.wd_height = contentHeight;
-            self.wd_layout.heightFix = YES;
-        }
+    }
+    if(self.wd_bottomViewArray.count && ceil(self.wd_height) != ceil(finalHeight)) {
+        self.wd_height = finalHeight;
+        self.wd_layout.heightFix = YES;
+    }
+    
+    if(self.wd_rightViewArray.count && ceil(self.wd_width) != ceil(finalWidth)) {
         
-        if(self.wd_rightViewArray.count && ceil(self.wd_width) != ceil(contentWidth)) {
-            
-            self.wd_width = contentWidth;
-            self.wd_layout.widthFix = YES;
-        }
-        if(self.wd_rightViewArray.count) {
-            [self.wd_layout adjustHorizontalConstraint];
-        }
-        if(self.wd_bottomViewArray.count) {
-            [self.wd_layout adjustVerticalConstraint];
-        }
+        self.wd_width = finalWidth;
+        self.wd_layout.widthFix = YES;
+    }
+    if(self.wd_rightViewArray.count) {
+        [self.wd_layout adjustHorizontalConstraint];
+    }
+    if(self.wd_bottomViewArray.count) {
+        [self.wd_layout adjustVerticalConstraint];
     }
 }
 
@@ -300,11 +331,9 @@
         CGFloat autoLayoutFixWidth = self.wd_autoLayoutFixWidth;
         if(self.wd_fixWidthLayout) {
             w = autoLayoutFixWidth;
-            if(rowCount > 1) {
-                hormargin = (self.wd_width - rowCount * w) / (rowCount - 1);
-            }
+            hormargin = (self.wd_width - rowCount * w) / (rowCount + 1);
         } else {
-            w = (self.wd_width - (rowCount - 1) * autoLayoutHorMargin) / rowCount;
+            w = (self.wd_width - (rowCount + 1) * autoLayoutHorMargin) / rowCount;
             hormargin = autoLayoutHorMargin;
         }
         
@@ -314,7 +343,7 @@
             UIView *view = self.wd_autoLayoutArray[i];
             if(i < self.wd_rowCount) {
                 if(i == 0) {
-                    view.wd_layout.leftEqualToView(refView).topSpaceToView(refView,autoLayoutVerMargin).width(w);
+                    view.wd_layout.leftSpaceToView(refView,hormargin).topSpaceToView(refView,autoLayoutVerMargin).width(w);
                 } else {
                     view.wd_layout.leftSpaceToView(refView,hormargin).topEqualToView(refView).width(w);
                 }
@@ -327,9 +356,8 @@
     }
 }
 
-- (void)wd_layoutSubviews
+- (void)layoutSubviewsFrame
 {
-    [self wd_layoutSubviews];
     [self wd_setupWidthEqualSubviews];
     [self wd_setupHeightEqualSubviews];
     [self wd_setupAutoLayout];
@@ -341,6 +369,13 @@
         [self wd_calculateNormalViewFrame];
     }
     [self wd_adjustMySelfFrame];
+}
+
+
+- (void)wd_layoutSubviews
+{
+    [self wd_layoutSubviews];
+    [self layoutSubviewsFrame];
 }
 
 - (void)setWd_didFinishedAutoLayout:(void (^)(CGRect))wd_didFinishedAutoLayout
@@ -688,6 +723,151 @@
     } else {
         self.wd_layout.maxHeight(MAXFLOAT);
     }
+}
+
+@end
+
+@implementation UIScrollView (WDAutoLayout)
+
+- (void)setWd_contentSizeHeightBottomView:(UIView *)wd_contentSizeHeightBottomView
+{
+    if(!wd_contentSizeHeightBottomView) return;
+    [self setWd_contentSizeHeightBottomViewArray:@[wd_contentSizeHeightBottomView]];
+}
+
+- (UIView *)wd_contentSizeHeightBottomView
+{
+    NSArray *array = [self wd_contentSizeHeightBottomViewArray];
+    if(!array.count) return nil;
+    return array[0];
+}
+
+- (void)setWd_contentSizeHeightBottomViewArray:(NSArray *)wd_contentSizeHeightBottomViewArray
+{
+    objc_setAssociatedObject(self, @selector(wd_contentSizeHeightBottomViewArray), wd_contentSizeHeightBottomViewArray, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSArray *)wd_contentSizeHeightBottomViewArray
+{
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+
+- (void)setWd_contentSizeWidthRightView:(UIView *)wd_contentSizeWidthRightView
+{
+    if(!wd_contentSizeWidthRightView) return;
+    [self setWd_contentSizeWidthRightViewArray:@[wd_contentSizeWidthRightView]];
+}
+
+- (UIView *)wd_contentSizeWidthRightView
+{
+    NSArray *array = [self wd_contentSizeWidthRightViewArray];
+    if(!array.count) return nil;
+    return array[0];
+}
+
+- (void)setWd_contentSizeWidthRightViewArray:(NSArray *)wd_contentSizeWidthRightViewArray
+{
+    objc_setAssociatedObject(self, @selector(wd_contentSizeWidthRightViewArray), wd_contentSizeWidthRightViewArray, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSArray *)wd_contentSizeWidthRightViewArray
+{
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setWd_contentSizeHeightMarginToBottom:(CGFloat)wd_contentSizeHeightMarginToBottom
+{
+    objc_setAssociatedObject(self, @selector(wd_contentSizeHeightMarginToBottom), @(wd_contentSizeHeightMarginToBottom), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CGFloat)wd_contentSizeHeightMarginToBottom
+{
+    return [objc_getAssociatedObject(self, _cmd) floatValue];
+}
+
+- (void)setWd_contentSizeWidthMarginToRight:(CGFloat)wd_contentSizeWidthMarginToRight
+{
+    objc_setAssociatedObject(self, @selector(wd_contentSizeWidthMarginToRight), @(wd_contentSizeWidthMarginToRight),OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CGFloat)wd_contentSizeWidthMarginToRight
+{
+    return [objc_getAssociatedObject(self, _cmd) floatValue];
+}
+
+- (void)wd_setupContentSizeHeightWithBottomView:(UIView *)bottomView contentSizeHeightmarginToBottom:(CGFloat)marginToBottom
+{
+    self.wd_contentSizeHeightBottomView = bottomView;
+    self.wd_contentSizeHeightMarginToBottom = marginToBottom;
+}
+
+- (void)wd_setupContentSizeHeightWithBottomViewArray:(NSArray *)bottomViewArray contentSizeHeightmarginToBottom:(CGFloat)marginToBottom
+{
+    self.wd_contentSizeHeightBottomViewArray = bottomViewArray;
+    self.wd_contentSizeHeightMarginToBottom = marginToBottom;
+}
+
+- (void)wd_setupContentSizeWidthWithRightView:(UIView *)rightView contentSizeWidthmarginToRight:(CGFloat)marginToRight
+{
+    self.wd_contentSizeWidthRightView = rightView;
+    self.wd_contentSizeWidthMarginToRight = marginToRight;
+}
+
+- (void)wd_setupContentSizeWidthWithRightViewArray:(NSArray *)rightViewArray contentSizeWidthmarginToRight:(CGFloat)marginToRight
+{
+    self.wd_contentSizeWidthRightViewArray = rightViewArray;
+    self.wd_contentSizeWidthMarginToRight = marginToRight;
+}
+
+@end
+
+@implementation UIButton (WDAutoLayout)
+
++ (void)load
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SEL systemSEL[] = {@selector(layoutSubviews)};
+        SEL customerSEL[] = {@selector(wd_buttonLayoutSubviews)};
+        for(int i = 0;i < sizeof(systemSEL) / sizeof(SEL);i++) {
+            Method systemMethod = class_getInstanceMethod(self,systemSEL[i]);
+            Method custmerMethod = class_getInstanceMethod(self,customerSEL[i]);
+            method_exchangeImplementations(systemMethod, custmerMethod);
+        }
+    });
+}
+
+- (void)wd_buttonWidthAutoresizingWithMargin:(CGFloat)horMargin fixHeight:(CGFloat)height
+{
+    self.titleLabel.wd_layout.topEqualToSuperView().leftSpaceToSuperView(horMargin).height(height);
+    self.titleLabel.wd_layout.autoresizingMaxWidth(0);
+    self.wd_layout.heightFix = YES;
+    self.wd_height = height;
+    [self wd_setupRightViewWithRightView:self.titleLabel marginToRight:horMargin];
+}
+
+- (void)wd_buttonHeightAutoresizingWithMargin:(CGFloat)verMargin fixWidth:(CGFloat)width
+{
+    self.titleLabel.wd_layout.leftEqualToSuperView().topSpaceToSuperView(verMargin).width(width);
+    self.titleLabel.wd_layout.autoHeightRatio(0);
+    self.wd_layout.widthFix = YES;
+    self.wd_width = width;
+    [self wd_setupBottomViewWithBottomView:self.titleLabel marginToBottom:verMargin];
+}
+
+- (void)wd_buttonWidthHeightAutoresizingWithHorMargin:(CGFloat)horMargin verMargin:(CGFloat)verMargin
+{
+    self.titleLabel.wd_layout.autoHeightRatio(0).autoresizingMaxWidth(0).leftSpaceToSuperView(horMargin).topSpaceToSuperView(verMargin);
+    [self wd_setupRightViewWithRightView:self.titleLabel marginToRight:horMargin];
+    [self wd_setupBottomViewWithBottomView:self.titleLabel marginToBottom:verMargin];
+    
+}
+
+- (void)wd_buttonLayoutSubviews
+{
+    [self wd_buttonLayoutSubviews];
+    [self layoutSubviewsFrame];
 }
 
 @end
