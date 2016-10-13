@@ -62,6 +62,10 @@
 		01AEB9B81CFA26AA00F62078 /* test3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 01AEB9891CFA26AA00F62078 /* test3.jpg */; };
 		01AEB9B91CFA26AA00F62078 /* test4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 01AEB98A1CFA26AA00F62078 /* test4.jpg */; };
 		01AEB9BC1CFA26AA00F62078 /* WDDemoVC7.m in Sources */ = {isa = PBXBuildFile; fileRef = 01AEB9BB1CFA26AA00F62078 /* WDDemoVC7.m */; };
+		01BBB8CC1DAF975600D134A8 /* UITableView+WDAutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 01BBB8C41DAF975600D134A8 /* UITableView+WDAutoLayout.m */; };
+		01BBB8CD1DAF975600D134A8 /* UIView+WDAutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 01BBB8C61DAF975600D134A8 /* UIView+WDAutoLayout.m */; };
+		01BBB8CE1DAF975600D134A8 /* WDLayoutConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 01BBB8C91DAF975600D134A8 /* WDLayoutConstraint.m */; };
+		01BBB8CF1DAF975600D134A8 /* WDViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 01BBB8CB1DAF975600D134A8 /* WDViewLayout.m */; };
 		01C810A11D0724FB004BE1A1 /* WDDemoVC8.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C810A01D0724FB004BE1A1 /* WDDemoVC8.m */; };
 		01C810A41D07253E004BE1A1 /* WDDemoVC8Cell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C810A31D07253E004BE1A1 /* WDDemoVC8Cell.m */; };
 		01C810A71D07277B004BE1A1 /* WDDemoVC8Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 01C810A61D07277B004BE1A1 /* WDDemoVC8Model.m */; };
@@ -72,10 +76,6 @@
 		01D152401CF9408E0051589C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01D1523E1CF9408E0051589C /* LaunchScreen.storyboard */; };
 		01D1524B1CF9408F0051589C /* WDAutoLayoutDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D1524A1CF9408F0051589C /* WDAutoLayoutDemoTests.m */; };
 		01D152561CF9408F0051589C /* WDAutoLayoutDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D152551CF9408F0051589C /* WDAutoLayoutDemoUITests.m */; };
-		01D1526F1CF941D70051589C /* UITableView+WDAutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D152651CF941D70051589C /* UITableView+WDAutoLayout.m */; };
-		01D152701CF941D70051589C /* UIView+WDAutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D152671CF941D70051589C /* UIView+WDAutoLayout.m */; };
-		01D152711CF941D70051589C /* WDLayoutConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D1526A1CF941D70051589C /* WDLayoutConstraint.m */; };
-		01D152731CF941D70051589C /* WDViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D1526E1CF941D70051589C /* WDViewLayout.m */; };
 		01D152CB1CF9433B0051589C /* WDRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D152CA1CF9433B0051589C /* WDRootViewController.m */; };
 		01D152CE1CF944260051589C /* WDRootCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D152CD1CF944260051589C /* WDRootCell.m */; };
 		01D152D11CF9450D0051589C /* WDDemoVC0.m in Sources */ = {isa = PBXBuildFile; fileRef = 01D152D01CF9450D0051589C /* WDDemoVC0.m */; };
@@ -171,6 +171,15 @@
 		01AEB98A1CFA26AA00F62078 /* test4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test4.jpg; sourceTree = "<group>"; };
 		01AEB9BA1CFA26AA00F62078 /* WDDemoVC7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDemoVC7.h; sourceTree = "<group>"; };
 		01AEB9BB1CFA26AA00F62078 /* WDDemoVC7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDemoVC7.m; sourceTree = "<group>"; };
+		01BBB8C31DAF975600D134A8 /* UITableView+WDAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+WDAutoLayout.h"; sourceTree = "<group>"; };
+		01BBB8C41DAF975600D134A8 /* UITableView+WDAutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+WDAutoLayout.m"; sourceTree = "<group>"; };
+		01BBB8C51DAF975600D134A8 /* UIView+WDAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WDAutoLayout.h"; sourceTree = "<group>"; };
+		01BBB8C61DAF975600D134A8 /* UIView+WDAutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WDAutoLayout.m"; sourceTree = "<group>"; };
+		01BBB8C71DAF975600D134A8 /* WDAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDAutoLayout.h; sourceTree = "<group>"; };
+		01BBB8C81DAF975600D134A8 /* WDLayoutConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDLayoutConstraint.h; sourceTree = "<group>"; };
+		01BBB8C91DAF975600D134A8 /* WDLayoutConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDLayoutConstraint.m; sourceTree = "<group>"; };
+		01BBB8CA1DAF975600D134A8 /* WDViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDViewLayout.h; sourceTree = "<group>"; };
+		01BBB8CB1DAF975600D134A8 /* WDViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDViewLayout.m; sourceTree = "<group>"; };
 		01C8109F1D0724FB004BE1A1 /* WDDemoVC8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDemoVC8.h; sourceTree = "<group>"; };
 		01C810A01D0724FB004BE1A1 /* WDDemoVC8.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDDemoVC8.m; sourceTree = "<group>"; };
 		01C810A21D07253E004BE1A1 /* WDDemoVC8Cell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDDemoVC8Cell.h; sourceTree = "<group>"; };
@@ -191,15 +200,6 @@
 		01D152511CF9408F0051589C /* WDAutoLayoutDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WDAutoLayoutDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		01D152551CF9408F0051589C /* WDAutoLayoutDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WDAutoLayoutDemoUITests.m; sourceTree = "<group>"; };
 		01D152571CF9408F0051589C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		01D152641CF941D70051589C /* UITableView+WDAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+WDAutoLayout.h"; sourceTree = "<group>"; };
-		01D152651CF941D70051589C /* UITableView+WDAutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+WDAutoLayout.m"; sourceTree = "<group>"; };
-		01D152661CF941D70051589C /* UIView+WDAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WDAutoLayout.h"; sourceTree = "<group>"; };
-		01D152671CF941D70051589C /* UIView+WDAutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WDAutoLayout.m"; sourceTree = "<group>"; };
-		01D152681CF941D70051589C /* WDAutoLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDAutoLayout.h; sourceTree = "<group>"; };
-		01D152691CF941D70051589C /* WDLayoutConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDLayoutConstraint.h; sourceTree = "<group>"; };
-		01D1526A1CF941D70051589C /* WDLayoutConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDLayoutConstraint.m; sourceTree = "<group>"; };
-		01D1526D1CF941D70051589C /* WDViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDViewLayout.h; sourceTree = "<group>"; };
-		01D1526E1CF941D70051589C /* WDViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDViewLayout.m; sourceTree = "<group>"; };
 		01D152C91CF9433B0051589C /* WDRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDRootViewController.h; sourceTree = "<group>"; };
 		01D152CA1CF9433B0051589C /* WDRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WDRootViewController.m; sourceTree = "<group>"; };
 		01D152CC1CF944260051589C /* WDRootCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WDRootCell.h; sourceTree = "<group>"; };
@@ -372,6 +372,22 @@
 			path = test;
 			sourceTree = "<group>";
 		};
+		01BBB8C21DAF975600D134A8 /* WDAutoLayout */ = {
+			isa = PBXGroup;
+			children = (
+				01BBB8C31DAF975600D134A8 /* UITableView+WDAutoLayout.h */,
+				01BBB8C41DAF975600D134A8 /* UITableView+WDAutoLayout.m */,
+				01BBB8C51DAF975600D134A8 /* UIView+WDAutoLayout.h */,
+				01BBB8C61DAF975600D134A8 /* UIView+WDAutoLayout.m */,
+				01BBB8C71DAF975600D134A8 /* WDAutoLayout.h */,
+				01BBB8C81DAF975600D134A8 /* WDLayoutConstraint.h */,
+				01BBB8C91DAF975600D134A8 /* WDLayoutConstraint.m */,
+				01BBB8CA1DAF975600D134A8 /* WDViewLayout.h */,
+				01BBB8CB1DAF975600D134A8 /* WDViewLayout.m */,
+			);
+			path = WDAutoLayout;
+			sourceTree = "<group>";
+		};
 		01C8109E1D0724DC004BE1A1 /* DemoVC8 */ = {
 			isa = PBXGroup;
 			children = (
@@ -408,9 +424,9 @@
 		01D1522F1CF9408E0051589C /* WDAutoLayoutDemo */ = {
 			isa = PBXGroup;
 			children = (
+				01BBB8C21DAF975600D134A8 /* WDAutoLayout */,
 				01D152C81CF942E20051589C /* Other */,
 				01D152741CF942450051589C /* Classes */,
-				01D152631CF941D70051589C /* WDAutoLayout */,
 				01D152331CF9408E0051589C /* AppDelegate.h */,
 				01D152341CF9408E0051589C /* AppDelegate.m */,
 				01D152391CF9408E0051589C /* Main.storyboard */,
@@ -447,22 +463,6 @@
 				01D152571CF9408F0051589C /* Info.plist */,
 			);
 			path = WDAutoLayoutDemoUITests;
-			sourceTree = "<group>";
-		};
-		01D152631CF941D70051589C /* WDAutoLayout */ = {
-			isa = PBXGroup;
-			children = (
-				01D152641CF941D70051589C /* UITableView+WDAutoLayout.h */,
-				01D152651CF941D70051589C /* UITableView+WDAutoLayout.m */,
-				01D152661CF941D70051589C /* UIView+WDAutoLayout.h */,
-				01D152671CF941D70051589C /* UIView+WDAutoLayout.m */,
-				01D152681CF941D70051589C /* WDAutoLayout.h */,
-				01D152691CF941D70051589C /* WDLayoutConstraint.h */,
-				01D1526A1CF941D70051589C /* WDLayoutConstraint.m */,
-				01D1526D1CF941D70051589C /* WDViewLayout.h */,
-				01D1526E1CF941D70051589C /* WDViewLayout.m */,
-			);
-			path = WDAutoLayout;
 			sourceTree = "<group>";
 		};
 		01D152741CF942450051589C /* Classes */ = {
@@ -731,14 +731,17 @@
 				01C810A11D0724FB004BE1A1 /* WDDemoVC8.m in Sources */,
 				01D152D41CF945A40051589C /* WDBaseViewController.m in Sources */,
 				01D152CB1CF9433B0051589C /* WDRootViewController.m in Sources */,
+				01BBB8CC1DAF975600D134A8 /* UITableView+WDAutoLayout.m in Sources */,
 				01D152E31CF94A4D0051589C /* WDDemoVC3Cell.m in Sources */,
-				01D152711CF941D70051589C /* WDLayoutConstraint.m in Sources */,
 				01AEB9541CFA26AA00F62078 /* SDTimeLineCellModel.m in Sources */,
 				01AEB9551CFA26AA00F62078 /* FriendCiclePhotoView.m in Sources */,
 				01D152EC1CF94CCF0051589C /* WDDemoVC5Cell.m in Sources */,
+				01BBB8CF1DAF975600D134A8 /* WDViewLayout.m in Sources */,
+				01BBB8CE1DAF975600D134A8 /* WDLayoutConstraint.m in Sources */,
 				01AEB9BC1CFA26AA00F62078 /* WDDemoVC7.m in Sources */,
 				01D152351CF9408E0051589C /* AppDelegate.m in Sources */,
 				01D152DD1CF949EB0051589C /* WDDemoVC2.m in Sources */,
+				01BBB8CD1DAF975600D134A8 /* UIView+WDAutoLayout.m in Sources */,
 				01AEB93D1CFA26AA00F62078 /* WDDemoVC4.m in Sources */,
 				01C810A41D07253E004BE1A1 /* WDDemoVC8Cell.m in Sources */,
 				01D152E01CF94A290051589C /* WDDemoVC3.m in Sources */,
@@ -748,9 +751,6 @@
 				01D152321CF9408E0051589C /* main.m in Sources */,
 				01D152CE1CF944260051589C /* WDRootCell.m in Sources */,
 				01D152D71CF947330051589C /* WDDemoVC1.m in Sources */,
-				01D152731CF941D70051589C /* WDViewLayout.m in Sources */,
-				01D152701CF941D70051589C /* UIView+WDAutoLayout.m in Sources */,
-				01D1526F1CF941D70051589C /* UITableView+WDAutoLayout.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

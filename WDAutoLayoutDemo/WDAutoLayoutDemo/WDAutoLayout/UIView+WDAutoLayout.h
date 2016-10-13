@@ -212,11 +212,11 @@
 - (void)wd_setupContentSizeHeightWithBottomView:(UIView *)bottomView contentSizeHeightmarginToBottom:(CGFloat)marginToBottom;
 - (void)wd_setupContentSizeHeightWithBottomViewArray:(NSArray *)bottomViewArray contentSizeHeightmarginToBottom:(CGFloat)marginToBottom;
 /**
- *  设置scrollView的contentSize自动随着view来变化
- *
- *  @param rightView     contentSizeWidth 所参考的最右边的view
- *  @param marginToRight 间距
- */
+  *  设置scrollView的contentSize自动随着view来变化
+  *
+  *  @param rightView     contentSizeWidth 所参考的最右边的view
+  *  @param marginToRight 间距
+  */
 - (void)wd_setupContentSizeWidthWithRightView:(UIView *)rightView contentSizeWidthmarginToRight:(CGFloat)marginToRight;
 - (void)wd_setupContentSizeWidthWithRightViewArray:(NSArray *)rightViewArray contentSizeWidthmarginToRight:(CGFloat)marginToRight;
 

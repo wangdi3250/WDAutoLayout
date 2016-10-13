@@ -28,8 +28,9 @@ typedef WDViewLayout *(^WDAutoHeightRatio)(CGFloat value);
 typedef WDViewLayout *(^WDWidthHeightEqualToView)(UIView *toView);
 typedef WDViewLayout *(^WDExtrasWidthHeight)(CGFloat value);
 typedef WDViewLayout *(^WDFixedWidthHeight)();
+typedef WDViewLayout *(^WDAutoWidthHeight)(NSArray<UIView *> *views,CGFloat margin);
 
-@interface WDViewLayout : NSObject<UIGestureRecognizerDelegate>
+@interface WDViewLayout : NSObject
 /**
  *  左边的距离，参数 toView: 参考的view value: 距离
  */
@@ -228,14 +229,6 @@ centerXEqualToSuperViewAndExtrasMargin;
  */
 @property (nonatomic, copy, readonly) WDAutoHeightRatio autoHeightRatio;
 /**
- *  宽度固定约束， 设置了这个，就不会帮你自动计算宽度
- */
-@property (nonatomic, copy, readonly) WDFixedWidthHeight fixedWidth;
-/**
- *  高度固定约束，设置了这个，就不会帮你自动计算高度
- */
-@property (nonatomic, copy, readonly) WDFixedWidthHeight fixedHeight;
-/**
  *  需要自动布局的view
  */
 @property (nonatomic, weak) UIView *needAutoLayoutView;
@@ -255,6 +248,18 @@ centerXEqualToSuperViewAndExtrasMargin;
  *  高度等于宽度约束，内部使用，外部无需关心
  */
 @property (nonatomic, strong, readonly) WDLayoutConstraint * heightEqualWidthConstraint;
+/**
+ *  宽度固定约束， 设置了这个，就不会帮你自动计算宽度
+ */
+@property (nonatomic, copy, readonly) WDFixedWidthHeight fixedWidth;
+/**
+ *  高度固定约束，设置了这个，就不会帮你自动计算高度
+ */
+@property (nonatomic, copy, readonly) WDFixedWidthHeight fixedHeight;
+@property (nonatomic, copy, readonly) WDAutoWidthHeight heightSpaceToBottom;
+@property (nonatomic, copy, readonly) WDAutoWidthHeight widthSpaceToRight;
+
+
 /**
  *  内部的缓存model，用来做缓存，内部使用，外部无需关心
  */

@@ -83,8 +83,7 @@
         _view5.wd_layout
         .leftSpaceToView(_view4, 10)
         .rightSpaceToView(self.contentView, 10)
-        .bottomSpaceToView(self.contentView, 10)
-        .heightRatioToView(_view4, 1);
+        .heightRatioToView(_view4, 1).topEqualToView(_view4);
         
         //***********************高度自适应cell设置步骤************************
         [self wd_setupBottomViewWithBottomView:_view4 marginToBottom:10];

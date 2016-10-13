@@ -40,8 +40,6 @@
 @property (nonatomic, strong) NSNumber *limitExtrasHeight;
 @property (nonatomic, strong) WDLayoutConstraint *widthRatioToViewConstraint;
 @property (nonatomic, strong) WDLayoutConstraint *heightRatioToViewConstraint;
-@property (nonatomic, strong) WDLayoutConstraint *fixedWidthConstraint;
-@property (nonatomic, strong) WDLayoutConstraint *fixedHeightConstraint;
 
 @end
 
@@ -98,6 +96,8 @@
 @synthesize centerYEqualToSuperView = _centerYEqualToSuperView;
 @synthesize fixedWidth = _fixedWidth;
 @synthesize fixedHeight = _fixedHeight;
+@synthesize heightSpaceToBottom = _heightSpaceToBottom;
+@synthesize widthSpaceToRight = _widthSpaceToRight;
 
 + (instancetype)layoutWithNeedAutoLayoutView:(UIView *)view
 {
@@ -545,32 +545,6 @@
     return _heightEqualWidth;
 }
 
-- (WDFixedWidthHeight)fixedWidth
-{
-    if(!_fixedWidth) {
-        __weak typeof(self) weakSelf = self;
-        _fixedWidth = ^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            strongSelf->_fixedWidthConstraint = [[WDLayoutConstraint alloc] init];
-            return weakSelf;
-        };
-    }
-    return _fixedWidth;
-}
-
-- (WDFixedWidthHeight)fixedHeight
-{
-    if(!_fixedHeight) {
-        __weak typeof(self) weakSelf = self;
-        _fixedHeight = ^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            strongSelf->_fixedHeightConstraint = [[WDLayoutConstraint alloc] init];
-            return weakSelf;
-        };
-    }
-    return _fixedHeight;
-}
-
 - (WDWidthHeight)widthHeightBlockWithKey:(NSString *)key
 {
     __weak typeof(self) weakSelf = self;
@@ -678,6 +652,56 @@
         };
     }
     return _autoHeightRatio;
+}
+
+- (WDFixedWidthHeight)fixedWidth
+{
+    if(!_fixedWidth) {
+        __weak typeof(self) weakSelf = self;
+        _fixedWidth = ^{
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strongSelf->_widthFix = YES;
+            return weakSelf;
+        };
+    }
+    return _fixedWidth;
+}
+
+- (WDFixedWidthHeight)fixedHeight
+{
+    if(!_fixedHeight) {
+        __weak typeof(self) weakSelf = self;
+        _fixedHeight = ^{
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strongSelf->_heightFix = YES;
+            return weakSelf;
+        };
+    }
+    return _fixedHeight;
+}
+
+- (WDAutoWidthHeight)heightSpaceToBottom
+{
+    if(!_heightSpaceToBottom) {
+        __weak typeof(self) weakSelf = self;
+        _heightSpaceToBottom = ^WDViewLayout *(NSArray<UIView *> *views,CGFloat margin) {
+            [weakSelf.needAutoLayoutView wd_setupBottomViewWithBottomViewArray:views marginToBottom:margin];
+            return weakSelf;
+        };
+    }
+    return _heightSpaceToBottom;
+}
+
+- (WDAutoWidthHeight)widthSpaceToRight
+{
+    if(!_widthSpaceToRight) {
+        __weak typeof(self) weakSelf = self;
+        _widthSpaceToRight = ^WDViewLayout*(NSArray<UIView *> *views,CGFloat margin) {
+            [weakSelf.needAutoLayoutView wd_setupRightViewWithRightViewArray:views marginToRight:margin];
+            return weakSelf;
+        };
+    }
+    return _widthSpaceToRight;
 }
 
 - (void)startLayout
