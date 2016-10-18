@@ -19,6 +19,7 @@ NSString * const demo5Description = @"1.利用普通view的内容自适应功能
 NSString * const demo6Description = @"利用SDAutoLayout仿制微信朋友圈。";
 NSString * const demo7Description = @"scroll任意布局内容自适应自动布局";
 NSString * const demo8Description = @"cell的多级缓存";
+NSString * const demo9Description = @"约束冲突的处理方式";
 
 @interface WDRootViewController ()
 
@@ -35,7 +36,7 @@ NSString * const demo8Description = @"cell的多级缓存";
 - (NSArray *)dataArray
 {
     if(!_dataArray) {
-            _dataArray = @[demo0Description, demo1Description, demo2Description, demo3Description, demo4Description, demo5Description,demo6Description,demo7Description,demo8Description];
+            _dataArray = @[demo0Description, demo1Description, demo2Description, demo3Description, demo4Description, demo5Description,demo6Description,demo7Description,demo8Description,demo9Description];
     }
     return _dataArray;
 }

@@ -80,7 +80,7 @@
 
 - (void)cacheCellWithCellClass:(Class)cellClass cell:(UITableViewCell *)cell
 {
-    if(!cellClass || !cellClass) return;
+    if(!cellClass || !cell) return;
     self.cellCache[NSStringFromClass(cellClass)] = cell;
 }
 

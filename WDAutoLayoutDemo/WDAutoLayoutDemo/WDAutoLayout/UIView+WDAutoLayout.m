@@ -126,6 +126,8 @@
 - (void)wd_updateLayout
 {
     [self wd_resetLayoutDidFinished:self.superview.wd_layoutArray];
+    self.wd_layout.hasCalculateHeight = NO;
+    self.wd_layout.hasCalculateWidth = NO;
     [self.superview layoutSubviews];
 }
 
@@ -290,13 +292,13 @@
     }
     if(self.wd_bottomViewArray.count && ceil(self.wd_height) != ceil(finalHeight)) {
         self.wd_height = finalHeight;
-        self.wd_layout.heightFix = YES;
+        self.wd_layout.hasCalculateHeight = YES;
     }
     
     if(self.wd_rightViewArray.count && ceil(self.wd_width) != ceil(finalWidth)) {
         
         self.wd_width = finalWidth;
-        self.wd_layout.widthFix = YES;
+        self.wd_layout.hasCalculateWidth = YES;
     }
     if(self.wd_rightViewArray.count) {
         [self.wd_layout adjustHorizontalConstraint];
@@ -842,7 +844,7 @@
 {
     self.titleLabel.wd_layout.topEqualToSuperView().leftSpaceToSuperView(horMargin).height(height);
     self.titleLabel.wd_layout.autoresizingMaxWidth(0);
-    self.wd_layout.heightFix = YES;
+    self.wd_layout.hasCalculateHeight = YES;
     self.wd_height = height;
     [self wd_setupRightViewWithRightView:self.titleLabel marginToRight:horMargin];
 }
@@ -851,7 +853,7 @@
 {
     self.titleLabel.wd_layout.leftEqualToSuperView().topSpaceToSuperView(verMargin).width(width);
     self.titleLabel.wd_layout.autoHeightRatio(0);
-    self.wd_layout.widthFix = YES;
+    self.wd_layout.hasCalculateWidth = YES;
     self.wd_width = width;
     [self wd_setupBottomViewWithBottomView:self.titleLabel marginToBottom:verMargin];
 }

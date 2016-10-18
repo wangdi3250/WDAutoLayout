@@ -47,7 +47,7 @@
     [self setupScrollViewSubView3];
     
     // 设置scrollview的contentsize自适应
-    [scroll wd_setupBottomViewWithBottomView:_redView marginToBottom:10];
+    [scroll wd_setupContentSizeHeightWithBottomView:_redView contentSizeHeightmarginToBottom:10];
 }
 
 // 设置scrollview的第一个子深粉色view（包含左边一个label、右边一个button的深粉色view，这个view根据label文字高度自适应）
