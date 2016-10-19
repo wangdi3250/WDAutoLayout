@@ -14,6 +14,7 @@
 @property (nonatomic, weak) UIView *view1;
 @property (nonatomic, weak) UIView *view2;
 @property (nonatomic, weak) UIView *view3;
+@property (nonatomic, weak) UIView *view4;
 
 @end
 
@@ -47,9 +48,18 @@
     btn.wd_layout.width(100).height(50).rightSpaceToSuperView(0).bottomSpaceToSuperView(0);
     
     
+    UIView *view4 = [[UIView alloc] init];
+    view4.backgroundColor = [UIColor greenColor];
+    [self.view addSubview:view4];
+    self.view4 = view4;
+    
+    
     view1.wd_layout.leftSpaceToSuperView(0).topSpaceToSuperView(100).width(100).height(100);
     view2.wd_layout.leftSpaceToView(view1,10).topEqualToView(view1).width(100).height(100);
     view3.wd_layout.leftSpaceToView(view2,10).topEqualToView(view2).width(100).height(100);
+    
+    view4.wd_layout.leftSpaceToSuperView(10).rightSpaceToSuperView(10).topSpaceToView(self.view1,50).height(50);
+    
 }
 
 - (void)btnClick:(UIButton *)btn
@@ -57,8 +67,10 @@
     btn.selected = !btn.selected;
     if(btn.selected) {
         self.view2.wd_layout.leftEqualToSuperView();
+        self.view4.wd_layout.widthKeepLeft(50,YES).bottomSpaceToSuperViewKeepHeight(100,YES);
     } else {
         self.view2.wd_layout.leftSpaceToView(self.view1,10);
+        self.view4.wd_layout.rightSpaceToSuperViewKeepWidth(10,NO).topSpaceToViewKeepHeight(self.view1,50,YES);
     }
     [self.view2 wd_updateLayout];
 }

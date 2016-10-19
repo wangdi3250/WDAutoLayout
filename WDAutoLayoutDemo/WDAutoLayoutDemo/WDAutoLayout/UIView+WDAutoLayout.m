@@ -57,7 +57,7 @@
         [self wd_setupBottomViewWithBottomViewArray:nil marginToBottom:0];
         [self wd_setupRightViewWithRightViewArray:nil marginToRight:0];
         if([self isKindOfClass:[UIScrollView class]]) {
-            UIScrollView *scrollView = self;
+            UIScrollView *scrollView = (UIScrollView *)self;
             [scrollView wd_setupContentSizeWidthWithRightViewArray:nil contentSizeWidthmarginToRight:0];
             [scrollView wd_setupContentSizeHeightWithBottomViewArray:nil contentSizeHeightmarginToBottom:0];
         }
@@ -228,7 +228,6 @@
 
 - (void)wd_adjustMySelfFrame
 {
-    if([self isKindOfClass:[UITableViewCell class]]) return;
     if([self isKindOfClass:[UIScrollView class]]) {
         UIScrollView *scrollView = (UIScrollView *)self;
         if(!scrollView.wd_contentSizeHeightBottomViewArray.count && !scrollView.wd_contentSizeWidthRightViewArray.count && !scrollView.wd_bottomViewArray.count && !scrollView.wd_rightViewArray.count) return;
@@ -844,8 +843,8 @@
 {
     self.titleLabel.wd_layout.topEqualToSuperView().leftSpaceToSuperView(horMargin).height(height);
     self.titleLabel.wd_layout.autoresizingMaxWidth(0);
-    self.wd_layout.hasCalculateHeight = YES;
     self.wd_height = height;
+    self.wd_layout.heightFix = YES;
     [self wd_setupRightViewWithRightView:self.titleLabel marginToRight:horMargin];
 }
 
@@ -853,8 +852,9 @@
 {
     self.titleLabel.wd_layout.leftEqualToSuperView().topSpaceToSuperView(verMargin).width(width);
     self.titleLabel.wd_layout.autoHeightRatio(0);
-    self.wd_layout.hasCalculateWidth = YES;
     self.wd_width = width;
+    self.wd_layout.widthFix = YES;
+    
     [self wd_setupBottomViewWithBottomView:self.titleLabel marginToBottom:verMargin];
 }
 

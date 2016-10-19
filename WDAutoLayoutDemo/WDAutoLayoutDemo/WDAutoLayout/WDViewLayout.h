@@ -29,9 +29,12 @@ typedef WDViewLayout *(^WDMarginEqualToSuperViewAndExtrasMarginKeepWidthHeight)(
 typedef WDViewLayout *(^WDWidthHeight)(CGFloat value);
 typedef WDViewLayout *(^WDWidthHeightKeepLeftTop)(CGFloat value,BOOL keep);
 typedef WDViewLayout *(^WDSameWidthHeight)(void);
+typedef WDViewLayout *(^WDSameWidthHeightKeepLeftTop)(BOOL keep);
 typedef WDViewLayout *(^WDWidthHeightRatioToView)(UIView *toView,CGFloat value);
+typedef WDViewLayout *(^WDWidthHeightRatioToViewKeepLeftTop)(UIView *toView,CGFloat value,BOOL keep);
 typedef WDViewLayout *(^WDSpaceToSuperView)(UIEdgeInsets edgeInsets);
 typedef WDViewLayout *(^WDWidthHeightEqualToView)(UIView *toView);
+typedef WDViewLayout *(^WDWidthHeightEqualToViewKeepLeftTop)(UIView *toView,BOOL keep);
 typedef WDViewLayout *(^WDExtrasWidthHeight)(CGFloat value);
 typedef WDViewLayout *(^WDFixedWidthHeight)();
 typedef WDViewLayout *(^WDAutoWidthHeight)(NSArray<UIView *> *views,CGFloat margin);
@@ -221,10 +224,12 @@ typedef WDViewLayout *(^WDAutoWidthHeight)(NSArray<UIView *> *views,CGFloat marg
  *  宽度相等 参数 toView: 参考的view
  */
 @property (nonatomic, copy, readonly) WDWidthHeightEqualToView widthEqualToView;
+@property (nonatomic, copy, readonly) WDWidthHeightEqualToViewKeepLeftTop widthEqualToViewKeepLeft;
 /**
  *  高度相等 参数 toView: 参考的view
  */
 @property (nonatomic, copy, readonly) WDWidthHeightEqualToView heightEqualToView;
+@property (nonatomic, copy, readonly) WDWidthHeightEqualToViewKeepLeftTop heightEqualToViewKeepTop;
 /**
  *  相对于父控件的上下左右的距离
  */
@@ -272,18 +277,22 @@ typedef WDViewLayout *(^WDAutoWidthHeight)(NSArray<UIView *> *views,CGFloat marg
  *  宽度跟高度相等
  */
 @property (nonatomic, copy, readonly) WDSameWidthHeight widthEqualHeight;
+@property (nonatomic, copy, readonly) WDSameWidthHeightKeepLeftTop widthEqualHeightKeepLeft;
 /**
  *  高度跟宽度相等
  */
 @property (nonatomic, copy, readonly) WDSameWidthHeight heightEqualWidth;
+@property (nonatomic, copy, readonly) WDSameWidthHeightKeepLeftTop heightEqualWidthKeepTop;
 /**
  *  宽度是参照view宽度的多少倍 参数 toView: 参照的view value: 倍数
  */
 @property (nonatomic, copy, readonly) WDWidthHeightRatioToView widthRatioToView;
+@property (nonatomic, copy, readonly) WDWidthHeightRatioToViewKeepLeftTop widthRatioToViewKeepLeft;
 /**
  *  高度是参照view高度的多少倍 参数 toView: 参照的view value: 倍数
  */
 @property (nonatomic, copy, readonly) WDWidthHeightRatioToView heightRatioToView;
+@property (nonatomic, copy, readonly) WDWidthHeightRatioToViewKeepLeftTop heightRatioToViewKeepTop;
 /**
  *  高度自适应，如果是UILabel，传入0即可实现自适应高度 参数 value: 高度和宽度的比值
  */

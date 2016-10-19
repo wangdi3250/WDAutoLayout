@@ -74,7 +74,9 @@
 @synthesize centerYEqualToView = _centerYEqualToView;
 @synthesize centerYEqualToViewKeepHeight = _centerYEqualToViewKeepHeight;
 @synthesize widthEqualToView = _widthEqualToView;
+@synthesize widthEqualToViewKeepLeft = _widthEqualToViewKeepLeft;
 @synthesize heightEqualToView = _heightEqualToView;
+@synthesize heightEqualToViewKeepTop = _heightEqualToViewKeepTop;
 @synthesize width = _width;
 @synthesize widthKeepLeft = _widthKeepLeft;
 @synthesize height = _height;
@@ -86,9 +88,13 @@
 @synthesize autoresizingMaxWidth = _autoresizingMaxWidth;
 @synthesize autoresizingMaxWidthKeepLeft = _autoresizingMaxWidthKeepLeft;
 @synthesize widthEqualHeight = _widthEqualHeight;
+@synthesize widthEqualHeightKeepLeft = _widthEqualHeightKeepLeft;
 @synthesize heightEqualWidth = _heightEqualWidth;
+@synthesize heightEqualWidthKeepTop = _heightEqualWidthKeepTop;
 @synthesize widthRatioToView = _widthRatioToView;
+@synthesize widthRatioToViewKeepLeft = _widthRatioToViewKeepLeft;
 @synthesize heightRatioToView = _heightRatioToView;
+@synthesize heightRatioToViewKeepTop = _heightRatioToViewKeepTop;
 @synthesize spaceToSuperView = _spaceToSuperView;
 @synthesize autoHeightRatio = _autoHeightRatio;
 @synthesize autoHeightRatioKeepTop = _autoHeightRatioKeepTop;
@@ -1050,6 +1056,18 @@
     return _widthEqualToView;
 }
 
+- (WDWidthHeightEqualToViewKeepLeftTop)widthEqualToViewKeepLeft
+{
+    if(!_widthEqualToViewKeepLeft) {
+        __weak typeof(self) weakSelf = self;
+        _widthEqualToViewKeepLeft = ^WDViewLayout *(UIView *toView,BOOL keep) {
+            weakSelf.widthRatioToViewKeepLeft(toView,1,keep);
+            return weakSelf;
+        };
+    }
+    return _widthEqualToViewKeepLeft;
+}
+
 - (WDWidthHeightEqualToView)heightEqualToView
 {
     if(!_heightEqualToView) {
@@ -1060,6 +1078,18 @@
         };
     }
     return _heightEqualToView;
+}
+
+- (WDWidthHeightEqualToViewKeepLeftTop)heightEqualToViewKeepLeft
+{
+    if(!_heightEqualToViewKeepTop) {
+        __weak typeof(self) weakSelf = self;
+        _heightEqualToViewKeepTop = ^WDViewLayout *(UIView *toView,BOOL keep) {
+            weakSelf.heightRatioToViewKeepTop(toView,1,keep);
+            return weakSelf;
+        };
+    }
+    return _heightEqualToViewKeepTop;
 }
 
 - (WDWidthHeight)width
@@ -1148,6 +1178,7 @@
 
 - (WDSameWidthHeight)widthEqualHeight
 {
+    [self removeWidthConstraint];
     if(!_widthEqualHeight) {
         __weak typeof(self) weakSelf = self;
         _widthEqualHeight = ^{
@@ -1159,8 +1190,31 @@
     return _widthEqualHeight;
 }
 
+- (WDSameWidthHeightKeepLeftTop)widthEqualHeightKeepLeft
+{
+    if(!_widthEqualHeightKeepLeft) {
+        __weak typeof(self) weakSelf = self;
+        _widthEqualHeightKeepLeft = ^WDViewLayout *(BOOL keep) {
+            weakSelf.widthEqualHeight();
+            BOOL hasLeftConstraint = [weakSelf hasLeftConstraint];
+            BOOL hasRightConstraint = [weakSelf hasRightConstraint];
+            if(hasLeftConstraint && hasRightConstraint) {
+                if(keep) {
+                    [weakSelf removeRightConstraint];
+                } else {
+                    [weakSelf removeLeftConstraint];
+                }
+            }
+
+            return weakSelf;
+        };
+    }
+    return _widthEqualHeightKeepLeft;
+}
+
 - (WDSameWidthHeight)heightEqualWidth
 {
+    [self removeHeightConstraint];
     if(!_heightEqualWidth) {
         __weak typeof(self) weakSelf = self;
         _heightEqualWidth = ^{
@@ -1170,6 +1224,27 @@
         };
     }
     return _heightEqualWidth;
+}
+
+- (WDSameWidthHeightKeepLeftTop)heightEqualWidthKeepTop
+{
+    if(!_heightEqualWidthKeepTop) {
+        __weak typeof(self) weakSelf = self;
+        _heightEqualWidthKeepTop = ^WDViewLayout *(BOOL keep) {
+            weakSelf.heightEqualWidth();
+            BOOL hasTopConstraint = [weakSelf hasTopConstraint];
+            BOOL hasBottomConstraint = [weakSelf hasBottomConstraint];
+            if(hasBottomConstraint && hasTopConstraint) {
+                if(keep) {
+                    [weakSelf removeBottomConstraint];
+                } else {
+                    [weakSelf removeTopConstraint];
+                }
+            }
+            return weakSelf;
+        };
+    }
+    return _heightEqualWidthKeepTop;
 }
 
 - (WDWidthHeight)widthHeightBlockWithKey:(NSString *)key
@@ -1255,18 +1330,62 @@
 
 - (WDWidthHeightRatioToView)widthRatioToView
 {
+    [self removeWidthConstraint];
     if(!_widthRatioToView) {
         _widthRatioToView = [self widthHeightRatioToViewBlockWithKey:@"widthRatioToViewConstraint"];
     }
     return _widthRatioToView;
 }
 
+- (WDWidthHeightRatioToViewKeepLeftTop)widthRatioToViewKeepLeft
+{
+    if(!_widthRatioToViewKeepLeft) {
+        __weak typeof(self) weakSelf = self;
+        _widthRatioToViewKeepLeft = ^WDViewLayout *(UIView *toView,CGFloat value,BOOL keep) {
+            weakSelf.widthRatioToView(toView,value);
+            BOOL hasLeftConstraint = [weakSelf hasLeftConstraint];
+            BOOL hasRightConstraint = [weakSelf hasRightConstraint];
+            if(hasLeftConstraint && hasRightConstraint) {
+                if(keep) {
+                    [weakSelf removeRightConstraint];
+                } else {
+                    [weakSelf removeLeftConstraint];
+                }
+            }
+            return weakSelf;
+        };
+    }
+    return _widthRatioToViewKeepLeft;
+}
+
 - (WDWidthHeightRatioToView)heightRatioToView
 {
+    [self removeHeightConstraint];
     if(!_heightRatioToView) {
         _heightRatioToView = [self widthHeightRatioToViewBlockWithKey:@"heightRatioToViewConstraint"];
     }
     return _heightRatioToView;
+}
+
+- (WDWidthHeightRatioToViewKeepLeftTop)heightRatioToViewKeepTop
+{
+    if(!_heightRatioToViewKeepTop) {
+        __weak typeof(self) weakSelf = self;
+        _heightRatioToViewKeepTop = ^WDViewLayout *(UIView *toView,CGFloat value,BOOL keep) {
+            weakSelf.heightRatioToView(toView,value);
+            BOOL hasTopConstraint = [weakSelf hasRightConstraint];
+            BOOL hasBottomConstraint = [weakSelf hasBottomConstraint];
+            if(hasBottomConstraint && hasTopConstraint) {
+                if(keep) {
+                    [weakSelf removeBottomConstraint];
+                } else {
+                    [weakSelf removeTopConstraint];
+                }
+            }
+            return weakSelf;
+        };
+    }
+    return _heightRatioToViewKeepTop;
 }
 
 - (WDWidthHeightRatioToView)widthHeightRatioToViewBlockWithKey:(NSString *)key
@@ -1353,6 +1472,7 @@
 
 - (WDAutoWidthHeight)heightSpaceToBottom
 {
+    [self removeHeightConstraint];
     if(!_heightSpaceToBottom) {
         __weak typeof(self) weakSelf = self;
         _heightSpaceToBottom = ^WDViewLayout *(NSArray<UIView *> *views,CGFloat margin) {
@@ -1365,6 +1485,7 @@
 
 - (WDAutoWidthHeight)widthSpaceToRight
 {
+    [self removeWidthConstraint];
     if(!_widthSpaceToRight) {
         __weak typeof(self) weakSelf = self;
         _widthSpaceToRight = ^WDViewLayout*(NSArray<UIView *> *views,CGFloat margin) {
@@ -1801,6 +1922,7 @@
 
 - (void)removeWidthConstraint
 {
+    self.hasCalculateWidth = NO;
     self.widthConstraint = nil;
     self.widthRatioToViewConstraint = nil;
     self.limitAutoresizingMaxWidth = nil;
@@ -1814,6 +1936,7 @@
 
 - (void)removeHeightConstraint
 {
+    self.hasCalculateHeight = NO;
     self.heightConstraint = nil;
     self.heightRatioToViewConstraint = nil;
     self.heightRatio = nil;
