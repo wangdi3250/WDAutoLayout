@@ -126,8 +126,6 @@
 - (void)wd_updateLayout
 {
     [self wd_resetLayoutDidFinished:self.superview.wd_layoutArray];
-    self.wd_layout.hasCalculateHeight = NO;
-    self.wd_layout.hasCalculateWidth = NO;
     [self.superview layoutSubviews];
 }
 
@@ -292,18 +290,13 @@
     if(self.wd_bottomViewArray.count && ceil(self.wd_height) != ceil(finalHeight)) {
         self.wd_height = finalHeight;
         self.wd_layout.hasCalculateHeight = YES;
+        [self.wd_layout adjustVerticalConstraint];
     }
     
     if(self.wd_rightViewArray.count && ceil(self.wd_width) != ceil(finalWidth)) {
-        
         self.wd_width = finalWidth;
         self.wd_layout.hasCalculateWidth = YES;
-    }
-    if(self.wd_rightViewArray.count) {
         [self.wd_layout adjustHorizontalConstraint];
-    }
-    if(self.wd_bottomViewArray.count) {
-        [self.wd_layout adjustVerticalConstraint];
     }
 }
 
@@ -870,6 +863,10 @@
 {
     [self wd_buttonLayoutSubviews];
     [self layoutSubviewsFrame];
+    if(self.titleLabel.wd_layout || self.imageView.wd_layout) {
+        [self.titleLabel.wd_layout startLayout];
+        [self.imageView.wd_layout startLayout];
+    }
 }
 
 @end

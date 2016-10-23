@@ -1500,7 +1500,8 @@
 {
     UIView *view = self.needAutoLayoutView;
     if(!view) return;
-    
+    self.hasCalculateWidth = NO;
+    self.hasCalculateHeight = NO;
     if(self.widthConstraint && self.widthConstraint.firstView == view && self.widthConstraint.secondView == view && !self.isWidthFix) {
         view.wd_width = self.widthConstraint.constant;
         if(self.limitExtrasWidth) {
