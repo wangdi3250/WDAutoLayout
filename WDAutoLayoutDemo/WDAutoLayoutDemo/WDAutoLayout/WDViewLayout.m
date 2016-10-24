@@ -1205,7 +1205,7 @@
                     [weakSelf removeLeftConstraint];
                 }
             }
-
+            
             return weakSelf;
         };
     }
@@ -1507,14 +1507,14 @@
         if(self.limitExtrasWidth) {
             view.wd_width += [self.limitExtrasWidth floatValue];
         }
-//        self.widthFix = YES;
+        //        self.widthFix = YES;
         self.hasCalculateWidth = YES;
     } else if(self.widthRatioToViewConstraint && self.widthRatioToViewConstraint.firstView == view && !self.isWidthFix) {
         view.wd_width = self.widthRatioToViewConstraint.secondView.wd_width * self.widthRatioToViewConstraint.multiplier;
         if(self.limitExtrasWidth) {
             view.wd_width += [self.limitExtrasWidth floatValue];
         }
-//        self.widthFix = YES;
+        //        self.widthFix = YES;
         self.hasCalculateWidth = YES;
     }
     
@@ -1523,14 +1523,14 @@
         if(self.limitExtrasHeight) {
             view.wd_height += [self.limitExtrasHeight floatValue];
         }
-//        self.heightFix = YES;
+        //        self.heightFix = YES;
         self.hasCalculateHeight = YES;
     } else if(self.heightRatioToViewConstraint && self.heightRatioToViewConstraint.firstView == view && !self.isHeightFix) {
         view.wd_height = self.heightRatioToViewConstraint.secondView.wd_height * self.heightRatioToViewConstraint.multiplier;
         if(self.limitExtrasHeight) {
             view.wd_height += [self.limitExtrasHeight floatValue];
         }
-//        self.heightFix = YES;
+        //        self.heightFix = YES;
         self.hasCalculateHeight = YES;
     }
     
@@ -1546,7 +1546,7 @@
                     if(self.limitExtrasWidth) {
                         label.wd_width += [self.limitExtrasWidth floatValue];
                     }
-//                    self.widthFix = YES;
+                    //                    self.widthFix = YES;
                 } else {
                     [label sizeToFit];
                     if(label.wd_width > maxWidth) {
@@ -1555,7 +1555,7 @@
                     if(self.limitExtrasWidth) {
                         label.wd_width += [self.limitExtrasWidth floatValue];
                     }
-//                    self.widthFix = YES;
+                    //                    self.widthFix = YES;
                 }
             } else {
                 label.wd_width = 0;
@@ -1601,7 +1601,7 @@
     [self adjustHorizontalConstraint];
     if(self.heightRatio && view.wd_width > 0) {
         CGFloat value = [self.heightRatio floatValue];
-//        self.heightFix = YES;
+        //        self.heightFix = YES;
         self.hasCalculateHeight = YES;
         if(value > 0) {
             view.wd_height = ceilf(view.wd_width * value);
@@ -1773,7 +1773,7 @@
             }
             view.wd_right = self.rightEqualConstraint.secondView.wd_width;
         } else {
-            if(!self.isWidthFix) {
+            if(!self.isWidthFix && !self.hasCalculateWidth) {
                 view.wd_width = self.rightEqualConstraint.secondView.wd_right - view.wd_left;
                 if(self.limitExtrasWidth) {
                     view.wd_width += [self.limitExtrasWidth floatValue];
@@ -1791,7 +1791,7 @@
             }
             view.wd_right = self.rightEqualAndExtrasMarginConstraint.secondView.wd_width -self.rightEqualAndExtrasMarginConstraint.constant;
         } else {
-            if(!self.isWidthFix) {
+            if(!self.isWidthFix && !self.hasCalculateWidth) {
                 view.wd_width = self.rightEqualAndExtrasMarginConstraint.secondView.wd_right -self.rightEqualAndExtrasMarginConstraint.constant - view.wd_left;
                 if(self.limitExtrasWidth) {
                     view.wd_width += [self.limitExtrasWidth floatValue];
@@ -1816,7 +1816,7 @@
             }
             view.wd_bottom = self.bottomConstraint.secondView.wd_height - self.bottomConstraint.constant;
         } else {
-            if(!self.isHeightFix) {
+            if(!self.isHeightFix && !self.hasCalculateHeight) {
                 view.wd_height = self.bottomConstraint.secondView.wd_top - self.bottomConstraint.constant - view.wd_top;
                 if(self.limitExtrasHeight) {
                     view.wd_height += [self.limitExtrasHeight floatValue];
@@ -1834,7 +1834,7 @@
             }
             view.wd_bottom = self.bottomEqualConstraint.secondView.wd_height;
         } else {
-            if(!self.isHeightFix) {
+            if(!self.isHeightFix && !self.hasCalculateHeight) {
                 view.wd_height = self.bottomEqualConstraint.secondView.wd_bottom - view.wd_top;
                 if(self.limitExtrasHeight) {
                     view.wd_height += [self.limitExtrasHeight floatValue];
@@ -1852,7 +1852,7 @@
             }
             view.wd_bottom = self.bottomEqualAndExtrasMarginConstraint.secondView.wd_height - self.bottomEqualAndExtrasMarginConstraint.constant;
         } else {
-            if(!self.isHeightFix) {
+            if(!self.isHeightFix && !self.hasCalculateHeight) {
                 view.wd_height = self.bottomEqualAndExtrasMarginConstraint.secondView.wd_bottom - self.bottomEqualAndExtrasMarginConstraint.constant - view.wd_top;
                 if(self.limitExtrasHeight) {
                     view.wd_height += [self.limitExtrasHeight floatValue];
@@ -1892,7 +1892,7 @@
 - (BOOL)hasTopConstraint
 {
     return self.topConstraint != nil || self.topEqualConstraint != nil || self.topEqualAndExtrasMarginConstraint != nil || self.centerYEqualConstraint != nil || self.centerYEqualAndExtrasMarginConstraint != nil;
-
+    
 }
 
 - (void)removeTopConstraint
