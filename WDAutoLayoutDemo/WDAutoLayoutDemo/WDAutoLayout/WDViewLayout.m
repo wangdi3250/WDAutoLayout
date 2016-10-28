@@ -1205,7 +1205,7 @@
                     [weakSelf removeLeftConstraint];
                 }
             }
-            
+
             return weakSelf;
         };
     }
@@ -1507,14 +1507,14 @@
         if(self.limitExtrasWidth) {
             view.wd_width += [self.limitExtrasWidth floatValue];
         }
-        //        self.widthFix = YES;
+//        self.widthFix = YES;
         self.hasCalculateWidth = YES;
     } else if(self.widthRatioToViewConstraint && self.widthRatioToViewConstraint.firstView == view && !self.isWidthFix) {
         view.wd_width = self.widthRatioToViewConstraint.secondView.wd_width * self.widthRatioToViewConstraint.multiplier;
         if(self.limitExtrasWidth) {
             view.wd_width += [self.limitExtrasWidth floatValue];
         }
-        //        self.widthFix = YES;
+//        self.widthFix = YES;
         self.hasCalculateWidth = YES;
     }
     
@@ -1523,14 +1523,14 @@
         if(self.limitExtrasHeight) {
             view.wd_height += [self.limitExtrasHeight floatValue];
         }
-        //        self.heightFix = YES;
+//        self.heightFix = YES;
         self.hasCalculateHeight = YES;
     } else if(self.heightRatioToViewConstraint && self.heightRatioToViewConstraint.firstView == view && !self.isHeightFix) {
         view.wd_height = self.heightRatioToViewConstraint.secondView.wd_height * self.heightRatioToViewConstraint.multiplier;
         if(self.limitExtrasHeight) {
             view.wd_height += [self.limitExtrasHeight floatValue];
         }
-        //        self.heightFix = YES;
+//        self.heightFix = YES;
         self.hasCalculateHeight = YES;
     }
     
@@ -1546,7 +1546,7 @@
                     if(self.limitExtrasWidth) {
                         label.wd_width += [self.limitExtrasWidth floatValue];
                     }
-                    //                    self.widthFix = YES;
+//                    self.widthFix = YES;
                 } else {
                     [label sizeToFit];
                     if(label.wd_width > maxWidth) {
@@ -1555,7 +1555,7 @@
                     if(self.limitExtrasWidth) {
                         label.wd_width += [self.limitExtrasWidth floatValue];
                     }
-                    //                    self.widthFix = YES;
+//                    self.widthFix = YES;
                 }
             } else {
                 label.wd_width = 0;
@@ -1601,7 +1601,7 @@
     [self adjustHorizontalConstraint];
     if(self.heightRatio && view.wd_width > 0) {
         CGFloat value = [self.heightRatio floatValue];
-        //        self.heightFix = YES;
+//        self.heightFix = YES;
         self.hasCalculateHeight = YES;
         if(value > 0) {
             view.wd_height = ceilf(view.wd_width * value);
@@ -1694,11 +1694,12 @@
     if(self.heightEqualWidthConstraint) {
         view.wd_height = view.wd_width;
     }
-    if(view.wd_didFinishedAutoLayout) {
-        view.wd_didFinishedAutoLayout(view.frame);
-    }
+    
     if(view.wd_bottomViewArray || view.wd_rightViewArray) {
         [view layoutSubviews];
+    }
+    if(view.wd_didFinishedAutoLayout) {
+        view.wd_didFinishedAutoLayout(view.frame);
     }
 }
 
@@ -1752,6 +1753,7 @@
                 if(self.limitExtrasWidth) {
                     view.wd_width += [self.limitExtrasWidth floatValue];
                 }
+                self.hasCalculateWidth = YES;
             }
             view.wd_right = self.rightConstraint.secondView.wd_width - self.rightConstraint.constant;
         } else {
@@ -1760,6 +1762,7 @@
                 if(self.limitExtrasWidth) {
                     view.wd_width += [self.limitExtrasWidth floatValue];
                 }
+                self.hasCalculateWidth = YES;
             }
             view.wd_right = self.rightConstraint.secondView.wd_left - self.rightConstraint.constant;
         }
@@ -1770,6 +1773,7 @@
                 if(self.limitExtrasWidth) {
                     view.wd_width += [self.limitExtrasWidth floatValue];
                 }
+                self.hasCalculateWidth = YES;
             }
             view.wd_right = self.rightEqualConstraint.secondView.wd_width;
         } else {
@@ -1778,6 +1782,7 @@
                 if(self.limitExtrasWidth) {
                     view.wd_width += [self.limitExtrasWidth floatValue];
                 }
+                self.hasCalculateWidth = YES;
             }
             view.wd_right = self.rightEqualConstraint.secondView.wd_right;
         }
@@ -1788,6 +1793,7 @@
                 if(self.limitExtrasWidth) {
                     view.wd_width += [self.limitExtrasWidth floatValue];
                 }
+                self.hasCalculateWidth = YES;
             }
             view.wd_right = self.rightEqualAndExtrasMarginConstraint.secondView.wd_width -self.rightEqualAndExtrasMarginConstraint.constant;
         } else {
@@ -1796,6 +1802,7 @@
                 if(self.limitExtrasWidth) {
                     view.wd_width += [self.limitExtrasWidth floatValue];
                 }
+                self.hasCalculateWidth = YES;
             }
             view.wd_right = self.rightEqualAndExtrasMarginConstraint.secondView.wd_right - self.rightEqualAndExtrasMarginConstraint.constant;
         }
@@ -1813,6 +1820,7 @@
                 if(self.limitExtrasHeight) {
                     view.wd_height += [self.limitExtrasHeight floatValue];
                 }
+                self.hasCalculateHeight = YES;
             }
             view.wd_bottom = self.bottomConstraint.secondView.wd_height - self.bottomConstraint.constant;
         } else {
@@ -1821,6 +1829,7 @@
                 if(self.limitExtrasHeight) {
                     view.wd_height += [self.limitExtrasHeight floatValue];
                 }
+                self.hasCalculateHeight = YES;
             }
             view.wd_bottom = self.bottomConstraint.secondView.wd_top - self.bottomConstraint.constant;
         }
@@ -1831,6 +1840,7 @@
                 if(self.limitExtrasHeight) {
                     view.wd_height += [self.limitExtrasHeight floatValue];
                 }
+                self.hasCalculateHeight = YES;
             }
             view.wd_bottom = self.bottomEqualConstraint.secondView.wd_height;
         } else {
@@ -1839,6 +1849,7 @@
                 if(self.limitExtrasHeight) {
                     view.wd_height += [self.limitExtrasHeight floatValue];
                 }
+                self.hasCalculateHeight = YES;
             }
             view.wd_bottom = self.bottomEqualConstraint.secondView.wd_bottom;
         }
@@ -1849,6 +1860,7 @@
                 if(self.limitExtrasHeight) {
                     view.wd_height += [self.limitExtrasHeight floatValue];
                 }
+                self.hasCalculateHeight = YES;
             }
             view.wd_bottom = self.bottomEqualAndExtrasMarginConstraint.secondView.wd_height - self.bottomEqualAndExtrasMarginConstraint.constant;
         } else {
@@ -1857,6 +1869,7 @@
                 if(self.limitExtrasHeight) {
                     view.wd_height += [self.limitExtrasHeight floatValue];
                 }
+                self.hasCalculateHeight = YES;
             }
             view.wd_bottom = self.bottomEqualAndExtrasMarginConstraint.secondView.wd_bottom - self.bottomEqualAndExtrasMarginConstraint.constant;
         }
@@ -1892,7 +1905,7 @@
 - (BOOL)hasTopConstraint
 {
     return self.topConstraint != nil || self.topEqualConstraint != nil || self.topEqualAndExtrasMarginConstraint != nil || self.centerYEqualConstraint != nil || self.centerYEqualAndExtrasMarginConstraint != nil;
-    
+
 }
 
 - (void)removeTopConstraint

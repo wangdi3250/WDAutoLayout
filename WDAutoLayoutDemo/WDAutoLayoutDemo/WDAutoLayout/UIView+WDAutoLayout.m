@@ -863,7 +863,7 @@
 {
     [self wd_buttonLayoutSubviews];
     [self layoutSubviewsFrame];
-    if(self.titleLabel.wd_layout || self.imageView.wd_layout) {
+    if(self.wd_layoutArray.count) {
         [self.titleLabel.wd_layout startLayout];
         [self.imageView.wd_layout startLayout];
     }
